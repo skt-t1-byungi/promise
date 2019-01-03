@@ -1,0 +1,6 @@
+{
+    "extends": "tslint-config-byungi",
+    "rules": {
+        "max-classes-per-file": false
+    }
+}

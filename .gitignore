@@ -1,0 +1,6 @@
+node_modules
+*.lock
+*.log
+packages/*/*.js
+packages/*/*.d.ts
+!packages/promise-types/index.d.ts
