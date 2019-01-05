@@ -1,5 +1,5 @@
 {
-    "name": "@byungi/p-cancel",
+    "name": "@byungi/p-delay",
     "version": "0.0.0",
     "main": "index.js",
     "license": "MIT",
@@ -8,8 +8,7 @@
         "index.d.ts"
     ],
     "dependencies": {
-        "p-state-defer": "^0.1.2",
-        "@byungi/promise-types": "^0.0.0"
+        "@byungi/p-cancel": "^0.0.0"
     },
     "publishConfig": {
         "access": "public"

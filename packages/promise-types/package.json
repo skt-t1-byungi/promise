@@ -1,6 +1,6 @@
 {
     "name": "@byungi/promise-types",
-    "version": "0.0.1",
+    "version": "0.0.0",
     "main": "",
     "types": "index.d.ts",
     "license": "MIT"

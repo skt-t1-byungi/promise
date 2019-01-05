@@ -1,7 +1,7 @@
 import test from 'ava'
 import PCancel, { CancelError } from './index'
 
-test('basic', async t => {
+test('p-cancel', async t => {
     t.plan(4)
     const p = new PCancel((resolve, reject, onCancel) => onCancel(() => t.pass()))
 

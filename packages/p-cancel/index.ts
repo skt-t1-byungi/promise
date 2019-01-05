@@ -19,8 +19,8 @@ export class CancelError extends Error {
 }
 
 export class PCancel<T> {
+    protected _defer: Deferred<T>
     private _isCanceled = false
-    private _defer: Deferred<T>
     private _cancelHandlers: CancelHandler[] = []
 
     constructor (executor: (resolve: ResolveFn<T>, reject: RejectFn, onCancel: AddCancelHandler) => void) {
