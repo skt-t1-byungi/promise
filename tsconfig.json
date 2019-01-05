@@ -2,9 +2,15 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "lib": ["es2015"],
+        "lib": ["esnext"],
         "declaration": true,
         "strict": true,
-        "esModuleInterop": true
-    }
+        "esModuleInterop": true,
+        "allowJs": false
+    },
+    "exclude": [
+        "node_modules",
+        "packages/*/*.js",
+        "packages/*/test.ts"
+    ]
 }

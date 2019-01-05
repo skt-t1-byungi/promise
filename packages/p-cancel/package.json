@@ -3,8 +3,15 @@
     "version": "0.0.0",
     "main": "index.js",
     "license": "MIT",
+    "files": [
+        "index.js",
+        "index.d.ts"
+    ],
     "dependencies": {
         "p-state-defer": "^0.1.2",
         "@byungi/promise-types": "^0.0.1"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

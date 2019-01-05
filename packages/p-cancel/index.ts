@@ -1,4 +1,5 @@
 import {
+    OnFinallyFn,
     OnFulfilledFn,
     OnRejectedFn,
     RejectFn,
@@ -9,9 +10,14 @@ import Deferred from 'p-state-defer'
 type CancelHandler = () => void
 type AddCancelHandler = (fn: CancelHandler) => void
 
-class CancelError extends Error {}
+class CancelError extends Error {
+    constructor (reason?: string) {
+        super(reason || '[p-cancel] promise cancelled.')
+        if (Object.setPrototypeOf) Object.setPrototypeOf(this, CancelError.prototype)
+    }
+}
 
-export = class PCancel<T> {
+class PCancel<T> {
     public static CancelError = CancelError
     public static default = PCancel
 
@@ -22,12 +28,11 @@ export = class PCancel<T> {
     constructor (executor: (resolve: ResolveFn<T>, reject: RejectFn, onCancel: AddCancelHandler) => void) {
         const defer = this._defer = new Deferred()
         this.cancel = this.cancel.bind(this)
-
         executor(defer.resolve.bind(defer), defer.reject.bind(defer), fn => this._cancelHandlers.push(fn))
     }
 
     public then<TR1= T, TR2= never> (onFulfilled?: OnFulfilledFn<T,TR1>, onRejected?: OnRejectedFn<TR2>) {
-        return new PCancel((resolve, reject, onCancel) => {
+        return new PCancel<TR1 | TR2>((resolve, reject, onCancel) => {
             onCancel(this.cancel)
             this._defer.promise.then(onFulfilled, onRejected).then(resolve, reject)
         })
@@ -35,6 +40,13 @@ export = class PCancel<T> {
 
     public catch<TR> (onRejected: OnRejectedFn<TR>) {
         return this.then(undefined, onRejected)
+    }
+
+    public finally (onFinally?: OnFinallyFn) {
+        return this.then(
+            val => (onFinally && onFinally(), val),
+            err => (onFinally && onFinally(), Promise.reject(err))
+        )
     }
 
     get isCanceled () {
@@ -46,11 +58,13 @@ export = class PCancel<T> {
         this._isCanceled = true
 
         try {
-            return this._cancelHandlers.forEach(fn => fn())
+            this._cancelHandlers.forEach(fn => fn())
         } catch (err) {
             this._defer.reject(err)
         }
 
-        if (!this._defer.isCompleted) this._defer.reject(new CancelError(reason))
+        if (!this._defer.isCompleted) this._defer.reject(new PCancel.CancelError(reason))
     }
 }
+
+export = PCancel
