@@ -1,5 +1,5 @@
 import test from 'ava'
-import PCancel from './index'
+import PCancel, { CancelError } from './index'
 
 test('basic', async t => {
     t.plan(4)
@@ -8,7 +8,7 @@ test('basic', async t => {
     t.false(p.isCanceled)
     p.cancel()
     t.true(p.isCanceled)
-    await t.throwsAsync(p, PCancel.CancelError)
+    await t.throwsAsync(p, CancelError)
 })
 
 test('chain', async t => {

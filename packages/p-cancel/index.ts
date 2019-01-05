@@ -10,17 +10,15 @@ import Deferred from 'p-state-defer'
 type CancelHandler = () => void
 type AddCancelHandler = (fn: CancelHandler) => void
 
-class CancelError extends Error {
+export class CancelError extends Error {
+    public readonly isCanceled = true
+
     constructor (reason = '[p-cancel] promise cancelled.') {
         super(reason)
-        if (Object.setPrototypeOf) Object.setPrototypeOf(this, CancelError.prototype)
     }
 }
 
-class PCancel<T> {
-    public static CancelError = CancelError
-    public static default = PCancel
-
+export class PCancel<T> {
     private _isCanceled = false
     private _defer: Deferred<T>
     private _cancelHandlers: CancelHandler[] = []
@@ -63,8 +61,8 @@ class PCancel<T> {
             this._defer.reject(err)
         }
 
-        if (!this._defer.isCompleted) this._defer.reject(new PCancel.CancelError(reason))
+        if (!this._defer.isCompleted) this._defer.reject(new CancelError(reason))
     }
 }
 
-export = PCancel
+export default PCancel
