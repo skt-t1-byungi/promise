@@ -1,23 +1,19 @@
-import PCancel from '@byungi/p-cancel'
+import { ResolveFn } from '@byungi/promise-types'
 
-class PDelay extends PCancel<void> {
-    private _timerId: number
-
-    constructor (ms: number) {
-        let timerId!: number
-        super((resolve, _, onCancel) => {
-            onCancel(clearTimeout.bind(undefined, timerId = setTimeout(resolve, ms)))
-        })
-        this._timerId = timerId
-    }
-
-    public clear () {
-        if (this._defer.isCompleted) return
-        clearTimeout(this._timerId)
-        this._defer.resolve()
-    }
+interface DelayPromise extends Promise<void> {
+    clear (): void
 }
 
-export const pDelay = (ms: number) => new PDelay(ms)
+export const pDelay = (ms: number) => {
+    let resolve!: ResolveFn<void>
+    const p = (new Promise<void>((_resolve) => resolve = _resolve) as DelayPromise)
+    let timerId: number | null = setTimeout(resolve, ms)
+    p.clear = () => {
+        if (!timerId) return
+        timerId = null
+        resolve()
+    }
+    return p
+}
 
 export default pDelay

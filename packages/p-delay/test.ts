@@ -21,14 +21,3 @@ test('clear', async t => {
     await p
     t.true(end(100, 30))
 })
-
-test('cancel', async t => {
-    const end = m()
-    const p = pDelay(200)
-    t.false(p.isCanceled)
-    await pDelay(100)
-    p.cancel()
-    await t.throwsAsync(p)
-    t.true(p.isCanceled)
-    t.true(end(100, 30))
-})
