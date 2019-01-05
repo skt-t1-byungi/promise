@@ -11,8 +11,8 @@ type CancelHandler = () => void
 type AddCancelHandler = (fn: CancelHandler) => void
 
 class CancelError extends Error {
-    constructor (reason?: string) {
-        super(reason || '[p-cancel] promise cancelled.')
+    constructor (reason = '[p-cancel] promise cancelled.') {
+        super(reason)
         if (Object.setPrototypeOf) Object.setPrototypeOf(this, CancelError.prototype)
     }
 }
