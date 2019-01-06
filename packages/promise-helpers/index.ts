@@ -5,5 +5,5 @@ export type OnRejectedFn<T = never> = (reason: any) => T | PromiseLike<T>
 export type OnFinallyFn = () => void
 
 export interface CancellablePromise<T> extends PromiseLike<T> {
-    cancel (reason?:string): void
+    cancel (reason?: string): void
 }

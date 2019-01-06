@@ -1,4 +1,4 @@
-import { CancellablePromise } from '@byungi/promise-types'
+import { CancellablePromise } from '@byungi/promise-helpers'
 
 export class TimeoutError extends Error {
     public readonly isTimeout = true

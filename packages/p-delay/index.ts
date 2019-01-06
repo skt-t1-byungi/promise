@@ -1,4 +1,4 @@
-import { ResolveFn } from '@byungi/promise-types'
+import { ResolveFn } from '@byungi/promise-helpers'
 
 interface DelayPromise extends Promise<void> {
     clear (): void

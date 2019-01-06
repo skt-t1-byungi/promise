@@ -4,7 +4,7 @@ import {
     OnRejectedFn,
     RejectFn,
     ResolveFn
-} from '@byungi/promise-types'
+} from '@byungi/promise-helpers'
 import Deferred from 'p-state-defer'
 
 type CancelHandler = () => void
