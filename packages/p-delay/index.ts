@@ -10,6 +10,7 @@ export const pDelay = (ms: number) => {
     let timerId: number | null = setTimeout(resolve, ms)
     p.clear = () => {
         if (!timerId) return
+        clearTimeout(timerId)
         timerId = null
         resolve()
     }
