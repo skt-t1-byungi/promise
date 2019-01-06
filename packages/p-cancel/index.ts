@@ -1,4 +1,5 @@
 import {
+    assert,
     OnFinallyFn,
     OnFulfilledFn,
     OnRejectedFn,
@@ -13,7 +14,7 @@ type AddCancelHandler = (fn: CancelHandler) => void
 export class CancelError extends Error {
     public readonly isCanceled = true
 
-    constructor (reason = '[p-cancel] promise cancelled.') {
+    constructor (reason = 'promise cancelled.') {
         super(reason)
     }
 }
@@ -27,7 +28,7 @@ export class PCancel<T> {
         const defer = this._defer = new Deferred()
         this.cancel = this.cancel.bind(this)
         executor(defer.resolve.bind(defer), defer.reject.bind(defer), fn => {
-            assertFunction('onCancel argument', fn)
+            assert('onCancel argument', 'function', fn)
             this._cancelHandlers.push(fn)
         })
     }
@@ -44,7 +45,7 @@ export class PCancel<T> {
     }
 
     public finally (onFinally?: OnFinallyFn) {
-        if (onFinally) assertFunction('onFinally', onFinally)
+        if (onFinally) assert('onFinally', 'function', onFinally)
         return this.then(
             val => Promise.resolve(onFinally && onFinally()).then(() => val),
             err => Promise.resolve(onFinally && onFinally()).then(() => { throw err })
@@ -70,10 +71,3 @@ export class PCancel<T> {
 }
 
 export default PCancel
-
-function assertFunction (name: string, fn: any) {
-    const type = typeof fn
-    if (type !== 'function') {
-        throw new TypeError(`[p-cancel] Expected "${name}" to be of type "function", but "${type}".`)
-    }
-}

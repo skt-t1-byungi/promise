@@ -1,5 +1,5 @@
 import PCancel from '@byungi/p-cancel'
-import { CancellablePromise } from '@byungi/promise-helpers'
+import { CancellablePromise, isCancellable } from '@byungi/promise-helpers'
 
 export const pRetry = <T>(runner: () => PromiseLike<T> | CancellablePromise<T> , { retries = 0, interval = 0 } = {}) =>
     new PCancel((resolve, reject, onCancel) => {
@@ -28,7 +28,3 @@ export const pRetry = <T>(runner: () => PromiseLike<T> | CancellablePromise<T> ,
     })
 
 export default pRetry
-
-function isCancellable <T> (promise: any): promise is CancellablePromise<T> {
-    return promise && typeof promise.cancel === 'function'
-}

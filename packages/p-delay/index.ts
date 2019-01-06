@@ -1,11 +1,11 @@
-import { ResolveFn } from '@byungi/promise-helpers'
+import { assert, ResolveFn } from '@byungi/promise-helpers'
 
 interface DelayPromise extends Promise<void> {
     clear (): void
 }
 
 export const pDelay = (ms: number) => {
-    if (typeof ms !== 'number') throw new TypeError(`[p-delay] Expected "ms" to be of type "number".`)
+    assert('ms', 'number', ms)
 
     let resolve!: ResolveFn<void>
     const p = (new Promise<void>((_resolve) => resolve = _resolve) as DelayPromise)
