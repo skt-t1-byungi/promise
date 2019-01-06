@@ -26,7 +26,10 @@ export class PCancel<T> {
     constructor (executor: (resolve: ResolveFn<T>, reject: RejectFn, onCancel: AddCancelHandler) => void) {
         const defer = this._defer = new Deferred()
         this.cancel = this.cancel.bind(this)
-        executor(defer.resolve.bind(defer), defer.reject.bind(defer), fn => this._cancelHandlers.push(fn))
+        executor(defer.resolve.bind(defer), defer.reject.bind(defer), fn => {
+            assertFunction('onCancel argument', fn)
+            this._cancelHandlers.push(fn)
+        })
     }
 
     public then<TR1= T, TR2= never> (onFulfilled?: OnFulfilledFn<T,TR1>, onRejected?: OnRejectedFn<TR2>) {
@@ -41,6 +44,7 @@ export class PCancel<T> {
     }
 
     public finally (onFinally?: OnFinallyFn) {
+        if (onFinally) assertFunction('onFinally', onFinally)
         return this.then(
             val => (onFinally && onFinally(), val),
             err => (onFinally && onFinally(), Promise.reject(err))
@@ -66,3 +70,10 @@ export class PCancel<T> {
 }
 
 export default PCancel
+
+function assertFunction (name: string, fn: any) {
+    const type = typeof fn
+    if (type !== 'function') {
+        throw new TypeError(`[p-cancel] Expected "${name}" to be of type "function", but "${type}".`)
+    }
+}
