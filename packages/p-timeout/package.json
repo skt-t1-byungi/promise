@@ -1,5 +1,5 @@
 {
-    "name": "@byungi/p-retry",
+    "name": "@byungi/p-timeout",
     "version": "0.0.0",
     "main": "index.js",
     "license": "MIT",
@@ -8,7 +8,6 @@
         "index.d.ts"
     ],
     "dependencies": {
-        "@byungi/p-cancel": "^0.0.0",
         "@byungi/promise-types": "^0.0.0"
     },
     "publishConfig": {

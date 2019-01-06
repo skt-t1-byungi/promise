@@ -9,11 +9,11 @@ export const pDelay = (ms: number) => {
 
     let resolve!: ResolveFn<void>
     const p = (new Promise<void>((_resolve) => resolve = _resolve) as DelayPromise)
-    let timerId: number | null = setTimeout(resolve, ms)
+    let timer: number | null = setTimeout(resolve, ms)
     p.clear = () => {
-        if (!timerId) return
-        clearTimeout(timerId)
-        timerId = null
+        if (!timer) return
+        clearTimeout(timer)
+        timer = null
         resolve()
     }
     return p

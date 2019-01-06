@@ -1,8 +1,5 @@
 import PCancel from '@byungi/p-cancel'
-
-interface CancellablePromise<T> extends PromiseLike<T> {
-    cancel (): void
-}
+import { CancellablePromise } from '@byungi/promise-types'
 
 export const pRetry = <T>(runner: () => PromiseLike<T> | CancellablePromise<T> , { retries = 0, interval = 0 } = {}) =>
     new PCancel((resolve, reject, onCancel) => {
