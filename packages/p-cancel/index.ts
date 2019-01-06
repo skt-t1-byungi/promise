@@ -46,8 +46,8 @@ export class PCancel<T> {
     public finally (onFinally?: OnFinallyFn) {
         if (onFinally) assertFunction('onFinally', onFinally)
         return this.then(
-            val => (onFinally && onFinally(), val),
-            err => (onFinally && onFinally(), Promise.reject(err))
+            val => Promise.resolve(onFinally && onFinally()).then(() => val),
+            err => Promise.resolve(onFinally && onFinally()).then(() => { throw err })
         )
     }
 
