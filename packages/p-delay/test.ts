@@ -6,7 +6,7 @@ const m = () => {
     return (expected: number, range: number) => range >= Math.abs(expected - (Date.now() - start))
 }
 
-test('p-delay', async t => {
+test('basic', async t => {
     const end = m()
     await pDelay(100)
     t.true(end(100, 30))
