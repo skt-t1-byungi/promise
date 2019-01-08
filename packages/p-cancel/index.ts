@@ -14,7 +14,7 @@ type AddCancelHandler = (fn: CancelHandler) => void
 export class CancelError extends Error {
     public readonly isCanceled = true
 
-    constructor (reason = 'promise cancelled.') {
+    constructor (reason = '[p-cancel] promise cancelled.') {
         super(reason)
     }
 }
