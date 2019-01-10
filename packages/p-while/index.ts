@@ -2,17 +2,17 @@ import PCancel from '@byungi/p-cancel'
 import pDelay from '@byungi/p-delay'
 import { isCancellable } from '@byungi/promise-helpers'
 
-type ReturnPromiseFn<T> = (() => T) | PromiseLike<T> | T
+type PromiseParam<T> = (() => T) | (() => PromiseLike<T>) | PromiseLike<T> | T
 
-export const ensureReturnsPromise = <T>(fn: ReturnPromiseFn<T>) => () => {
+export const ensurePromiseReturn = <T>(fn: PromiseParam<T>) => () => {
     // Function intersections issue : https://github.com/Microsoft/TypeScript/issues/26970
     return Promise.resolve(typeof fn === 'function' ? (fn as (() => T))() : fn)
 }
 
-export const pWhile = <T1,T2>(condition: ReturnPromiseFn<T1>, action: ReturnPromiseFn<T2>, { interval = 0 } = {}) =>
+export const pWhile = <T1,T2>(condition: PromiseParam<T1>, action: PromiseParam<T2>, { interval = 0 } = {}) =>
     new PCancel((resolve, reject, onCancel) => {
-        const wrapCondition = ensureReturnsPromise(condition)
-        const wrapAction = ensureReturnsPromise(action)
+        const wrappedCondition = ensurePromiseReturn(condition)
+        const wrappedAction = ensurePromiseReturn(action)
 
         let currPromise: PromiseLike<any>
         let prevResult: T2
@@ -25,14 +25,13 @@ export const pWhile = <T1,T2>(condition: ReturnPromiseFn<T1>, action: ReturnProm
 
         const run = <T>(promise: PromiseLike<T>, fn: (result: T) => void) => {
             if (isCanceled) return
-            currPromise = promise
-            currPromise.then(fn, reject)
+            (currPromise = promise).then(fn, reject)
         }
 
         const runner = () =>
-            run(wrapCondition(), isContinue => {
+            run(wrappedCondition(), isContinue => {
                 if (!isContinue) return resolve(prevResult)
-                run(wrapAction(), result => {
+                run(wrappedAction(), result => {
                     prevResult = result
                     run(pDelay(interval), runner)
                 })
