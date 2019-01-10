@@ -34,14 +34,18 @@ export class PCancel<T> {
     }
 
     public then<TR1= T, TR2= never> (onFulfilled?: OnFulfilledFn<T,TR1>, onRejected?: OnRejectedFn<TR2>) {
+        return this._defer.promise.then(onFulfilled, onRejected)
+    }
+
+    public catch<TR> (onRejected: OnRejectedFn<TR>) {
+        return this._defer.promise.catch(onRejected)
+    }
+
+    public pipe<TR1= T, TR2= never> (onFulfilled?: OnFulfilledFn<T,TR1>, onRejected?: OnRejectedFn<TR2>) {
         return new PCancel<TR1 | TR2>((resolve, reject, onCancel) => {
             onCancel(this.cancel)
             this._defer.promise.then(onFulfilled, onRejected).then(resolve, reject)
         })
-    }
-
-    public catch<TR> (onRejected: OnRejectedFn<TR>) {
-        return this.then(undefined, onRejected)
     }
 
     public finally (onFinally?: OnFinallyFn) {

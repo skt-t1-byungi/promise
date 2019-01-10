@@ -11,10 +11,10 @@ test('basic', async t => {
     await t.throwsAsync(p, CancelError)
 })
 
-test('chain', async t => {
+test('pipe', async t => {
     t.plan(5)
     const p = new PCancel((resolve, reject, onCancel) => onCancel(() => t.pass()))
-    const np = p.then(() => undefined)
+    const np = p.pipe(() => undefined)
 
     t.false(np.isCanceled)
     np.cancel()
