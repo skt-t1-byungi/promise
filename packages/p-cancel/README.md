@@ -33,7 +33,7 @@ requestPromise.catch(err => {
 `PCancel` is a promise implementation. Same as promise creation except for `onCancel`. `onCancel` receives a function to operate on `cancel()`.
 
 ```js
-const promise = new PCancel((resolve, reject, onCancel)=>{
+const promise = new PCancel((resolve, reject, onCancel) => {
     const timerId = setTimeout(lazyJob, 1000)
     onCancel(()=> clearTimeout(timerId))
 })
