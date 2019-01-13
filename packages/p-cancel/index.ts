@@ -14,7 +14,7 @@ type AddCancelHandler = (fn: CancelHandler) => void
 export class CancelError extends Error {
     public readonly isCanceled = true
 
-    constructor (reason = '[p-cancel] promise cancelled.') {
+    constructor (reason = 'promise cancelled.') {
         super(reason)
     }
 }
@@ -42,10 +42,20 @@ export class PCancel<T> {
     }
 
     public pipe<TR1= T, TR2= never> (onFulfilled?: OnFulfilledFn<T,TR1>, onRejected?: OnRejectedFn<TR2>) {
-        return new PCancel<TR1 | TR2>((resolve, reject, onCancel) => {
+        const promise = new PCancel<TR1 | TR2>((resolve, reject, onCancel) => {
             onCancel(this.cancel)
-            this._defer.promise.then(onFulfilled, onRejected).then(resolve, reject)
+            this._defer.promise.then(
+                val => {
+                    if (promise.isCanceled) return
+                    resolve((onFulfilled ? onFulfilled(val) : val) as TR1)
+                },
+                err => {
+                    if (promise.isCanceled) return
+                    reject(onRejected ? onRejected(err) : err)
+                }
+            )
         })
+        return promise
     }
 
     public finally (onFinally?: OnFinallyFn) {

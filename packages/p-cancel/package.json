@@ -1,12 +1,27 @@
 {
     "name": "@byungi/p-cancel",
+    "description": "A cancelable promise.",
     "version": "0.0.0",
+    "keywords": [
+        "promise",
+        "cancel",
+        "cancelable",
+        "cancellable",
+        "cancellation",
+        "abort"
+    ],
+    "author": {
+        "email": "tiniwz@gmail.com",
+        "name": "skt-t1-byungi"
+    },
+    "repository": "https://github.com/skt-t1-byungi/promise/tree/master/packages/p-cancel",
     "main": "index.js",
     "license": "MIT",
     "files": [
         "index.js",
         "index.d.ts"
     ],
+    "types": "index.d.ts",
     "dependencies": {
         "p-state-defer": "^0.1.2",
         "@byungi/promise-helpers": "^0.0.0"

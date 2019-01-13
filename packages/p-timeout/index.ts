@@ -3,7 +3,7 @@ import { CancellablePromise, isCancellable } from '@byungi/promise-helpers'
 export class TimeoutError extends Error {
     public readonly isTimeout = true
 
-    constructor (reason = '[p-timeout] promise timeout.') {
+    constructor (reason = 'promise timeout.') {
         super(reason)
     }
 }
