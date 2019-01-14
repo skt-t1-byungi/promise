@@ -1,12 +1,26 @@
 {
     "name": "@byungi/p-timeout",
+    "description": "Promise timeout after specified time.",
     "version": "0.0.0",
+    "keywords": [
+        "promise",
+        "timeout",
+        "time",
+        "over",
+        "limit"
+    ],
+    "author": {
+        "email": "tiniwz@gmail.com",
+        "name": "skt-t1-byungi"
+    },
+    "repository": "https://github.com/skt-t1-byungi/promise/tree/master/packages/p-timeout",
     "main": "index.js",
     "license": "MIT",
     "files": [
         "index.js",
         "index.d.ts"
     ],
+    "types": "index.d.ts",
     "dependencies": {
         "@byungi/promise-helpers": "^0.0.0"
     },

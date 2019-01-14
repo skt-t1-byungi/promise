@@ -19,7 +19,7 @@ try{
 Retry when promise fails.
 
 #### runner
-Function to retry on failure. This function should return promise.
+A function that retries when a promise is rejected. This function should return promise.
 
 #### options
 - `retries` - Number of retries. Default is 1.
