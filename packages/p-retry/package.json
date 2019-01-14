@@ -1,12 +1,25 @@
 {
     "name": "@byungi/p-retry",
+    "description": "Retry when promise fails.",
     "version": "0.0.0",
+    "keywords": [
+        "promise",
+        "retry",
+        "retries",
+        "try"
+    ],
+    "author": {
+        "email": "tiniwz@gmail.com",
+        "name": "skt-t1-byungi"
+    },
+    "repository": "https://github.com/skt-t1-byungi/promise/tree/master/packages/p-retry",
     "main": "index.js",
     "license": "MIT",
     "files": [
         "index.js",
         "index.d.ts"
     ],
+    "types": "index.d.ts",
     "dependencies": {
         "@byungi/p-cancel": "^0.0.0",
         "@byungi/promise-helpers": "^0.0.0"

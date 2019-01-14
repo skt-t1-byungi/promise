@@ -17,7 +17,7 @@ import pDelay from '@byungi/p-delay';
 Create a delayed promise.
 
 #### options
-- `clearable` - If true, returns a delayed promise that can be cleared. Default is false
+- `clearable` - If true, returns a delayed promise that can be cleared. Default is false.
 ```js
 const delayPromise = pDelay(500, {clearable: true})
 

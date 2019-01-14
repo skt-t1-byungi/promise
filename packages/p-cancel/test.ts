@@ -12,15 +12,18 @@ test('basic', async t => {
 })
 
 test('pipe', async t => {
-    t.plan(6)
+    t.plan(9)
     const p = new PCancel((resolve, reject, onCancel) => onCancel(() => t.pass()))
     const np = p.pipe(() => undefined)
     const npp = np.pipe(() => undefined, () => t.fail())
 
+    t.false(p.isCanceled)
     t.false(np.isCanceled)
+    t.false(npp.isCanceled)
     npp.cancel()
     t.true(p.isCanceled)
     t.true(np.isCanceled)
+    t.true(npp.isCanceled)
     await t.throwsAsync(np)
     await t.throwsAsync(npp)
 })
