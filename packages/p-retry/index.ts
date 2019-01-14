@@ -1,6 +1,8 @@
 import PCancel from '@byungi/p-cancel'
 import { CancellablePromise, isCancellable } from '@byungi/promise-helpers'
 
+export { CancelError } from '@byungi/p-cancel'
+
 export const pRetry = <T>(runner: () => PromiseLike<T> | CancellablePromise<T> , { retries = 1, interval = 0 } = {}) =>
     new PCancel((resolve, reject, onCancel) => {
         let promise: PromiseLike<T> | CancellablePromise<T>
