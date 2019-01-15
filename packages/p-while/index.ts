@@ -2,6 +2,8 @@ import PCancel from '@byungi/p-cancel'
 import pDelay from '@byungi/p-delay'
 import { isCancellable } from '@byungi/promise-helpers'
 
+export { CancelError } from '@byungi/p-cancel'
+
 type Param<T> = (() => T) | (() => PromiseLike<T>) | PromiseLike<T> | T
 
 export const ensurePromiseReturn = <T>(fn: Param<T>) => () => {

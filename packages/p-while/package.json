@@ -1,12 +1,25 @@
 {
     "name": "@byungi/p-while",
+    "description": "A promise for an asynchronous while loop.",
     "version": "0.0.0",
+    "keywords": [
+        "promise",
+        "while",
+        "loop",
+        "conditon"
+    ],
+    "author": {
+        "email": "tiniwz@gmail.com",
+        "name": "skt-t1-byungi"
+    },
+    "repository": "https://github.com/skt-t1-byungi/promise/tree/master/packages/p-while",
     "main": "index.js",
     "license": "MIT",
     "files": [
         "index.js",
         "index.d.ts"
     ],
+    "types": "index.d.ts",
     "dependencies": {
         "@byungi/promise-helpers": "^0.0.0",
         "@byungi/p-cancel": "^0.0.0",

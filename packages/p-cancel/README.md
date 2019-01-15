@@ -43,7 +43,7 @@ const promise = new PCancel((resolve, reject, onCancel) => {
 Execute the cancel operation added with `onCancel` and throw a `CancelError`.
 
 ### promise.isCanceled
-Returns whether or not promise is canceled.
+Returns whether the promise is canceled.
 
 ### promise.pipe(onFulfilled, onRejected)
 Similar to `then` but can propagate `cancel` to the upper promise.

@@ -1,5 +1,5 @@
 # @byungi/p-timeout
-Promise timeout after specified time.
+Promise timeout after a specified time.
 
 ## Example
 ```js
@@ -14,7 +14,7 @@ pTimeout(pDelay(1000), 500) // After 500ms, delay promise is timeout.
 
 ## API
 ### pTimeout(promise, ms)
-Wrap promise to timeout if input promise takes longer than specified time.
+Wrap promise to timeout if input promise takes longer than the specified time.
 
 ## License
 MIT
