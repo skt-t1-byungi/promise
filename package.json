@@ -7,7 +7,7 @@
         "build": "tsc",
         "clean": "npx del packages/*/*.js packages/*/*.d.ts",
         "test": "npm run clean && ava",
-        "publish": "yarn test && lerna publish"
+        "publish": "yarn test && yarn build && lerna publish"
     },
     "devDependencies": {
         "ava": "^1.0.1",
