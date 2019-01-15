@@ -1,7 +1,7 @@
 {
     "name": "@byungi/p-retry",
     "description": "Retry when promise fails.",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "keywords": [
         "promise",
         "retry",
@@ -21,8 +21,8 @@
     ],
     "types": "index.d.ts",
     "dependencies": {
-        "@byungi/p-cancel": "^0.0.0",
-        "@byungi/promise-helpers": "^0.0.0"
+        "@byungi/p-cancel": "^0.0.1",
+        "@byungi/promise-helpers": "^0.0.1"
     },
     "publishConfig": {
         "access": "public"
