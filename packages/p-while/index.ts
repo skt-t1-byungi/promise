@@ -9,35 +9,49 @@ export const ensurePromiseReturn = <T>(fn: Param<T>) => () => {
     return Promise.resolve(typeof fn === 'function' ? (fn as (() => T))() : fn)
 }
 
-export const pWhile = <T1,T2>(condition: Param<T1>, action: Param<T2>, { interval = 0 } = {}) =>
-    new PCancel((resolve, reject, onCancel) => {
-        const wrappedCondition = ensurePromiseReturn(condition)
-        const wrappedAction = ensurePromiseReturn(action)
+class PWhile<T1 extends boolean, T2> extends PCancel<T2 | null> {
+    private _prevResult: T2 | null = null
 
-        let currPromise: PromiseLike<any>
-        let prevResult: T2
-        let isCanceled = false
+    constructor (condition: Param<T1>, action: Param<T2>, { interval }: {interval: number}) {
+        super((resolve, reject, onCancel) => {
+            const wrappedCondition = ensurePromiseReturn(condition)
+            const wrappedAction = ensurePromiseReturn(action)
 
-        onCancel(() => {
-            isCanceled = true
-            if (isCancellable(currPromise)) currPromise.cancel()
-        })
+            let currPromise: PromiseLike<any>
+            let isCanceled = false
 
-        const run = <T>(promise: PromiseLike<T>, fn: (result: T) => void) => {
-            if (isCanceled) return
-            (currPromise = promise).then(fn, reject)
-        }
-
-        const runner = () =>
-            run(wrappedCondition(), isContinue => {
-                if (!isContinue) return resolve(prevResult)
-                run(wrappedAction(), result => {
-                    prevResult = result
-                    run(pDelay(interval), runner)
-                })
+            onCancel(() => {
+                isCanceled = true
+                if (isCancellable(currPromise)) currPromise.cancel()
             })
 
-        runner()
-    })
+            const run = <T>(promise: PromiseLike<T>, fn: (result: T) => void) => {
+                if (isCanceled) return
+                (currPromise = promise).then(fn, reject)
+            }
+
+            const runner = () =>
+                run(wrappedCondition(), isContinue => {
+                    if (!isContinue) return resolve(this._prevResult)
+                    run(wrappedAction(), result => {
+                        this._prevResult = result
+                        run(pDelay(interval), runner)
+                    })
+                })
+
+            runner()
+        })
+    }
+
+    public break () {
+        this._defer.resolve(this._prevResult)
+    }
+}
+
+export const pWhile = <T1 extends boolean, T2>(
+    condition: Param<T1>,
+    action: Param<T2>,
+    { interval = 0 } = {}
+) => new PWhile(condition, action, { interval })
 
 export default pWhile
