@@ -3,7 +3,7 @@
 
 ![witch](./witch.png)
 
-For use in browsers, but older browsers need `promise polyfill` and `babel`.
+Old browsers need `promise polyfill` and `babel`.
 
 ## Packages
 - [p-cancel](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-cancel) - A cancelable promise.
