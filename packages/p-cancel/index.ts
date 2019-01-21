@@ -26,7 +26,6 @@ export class PCancel<T> {
 
     constructor (executor: (resolve: ResolveFn<T>, reject: RejectFn, onCancel: AddCancelHandler) => void) {
         const defer = this._defer = new Deferred()
-        this.cancel = this.cancel.bind(this)
         executor(defer.resolve.bind(defer), defer.reject.bind(defer), fn => {
             assert('onCancel argument', 'function', fn)
             this._cancelHandlers.push(fn)
@@ -46,7 +45,7 @@ export class PCancel<T> {
         if (onRejected) assert('onRejected', 'function', onRejected)
 
         const promise = new PCancel<TR1 | TR2>((resolve, reject, onCancel) => {
-            onCancel(this.cancel)
+            onCancel(this.cancel.bind(this))
             this._defer.promise.then(
                 val => {
                     if (promise.isCanceled) return
