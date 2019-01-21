@@ -1,7 +1,7 @@
 {
     "name": "@byungi/p-cancel",
     "description": "A cancelable promise.",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "engines": {
         "node": ">= 8"
     },
@@ -26,7 +26,7 @@
     ],
     "types": "index.d.ts",
     "dependencies": {
-        "@byungi/promise-helpers": "^0.0.2",
+        "@byungi/promise-helpers": "^0.0.3",
         "p-state-defer": "^0.1.2"
     },
     "publishConfig": {
