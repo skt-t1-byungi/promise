@@ -29,6 +29,7 @@ test('pipe', async t => {
 })
 
 test('An error should not be propagated if catch by a pipe.', async t => {
+    t.plan(2)
     const p = new PCancel((_, reject) => setTimeout(reject, 0))
     const np = p.pipe(() => void 0, () => t.pass())
     await t.notThrowsAsync(np)
