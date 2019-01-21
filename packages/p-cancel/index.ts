@@ -42,6 +42,9 @@ export class PCancel<T> {
     }
 
     public pipe<TR1= T, TR2= never> (onFulfilled?: OnFulfilledFn<T,TR1>, onRejected?: OnRejectedFn<TR2>) {
+        if (onFulfilled) assert('onFulfilled', 'function', onFulfilled)
+        if (onRejected) assert('onRejected', 'function', onRejected)
+
         const promise = new PCancel<TR1 | TR2>((resolve, reject, onCancel) => {
             onCancel(this.cancel)
             this._defer.promise.then(
@@ -51,9 +54,12 @@ export class PCancel<T> {
                 },
                 err => {
                     if (promise.isCanceled) return
-                    reject(onRejected ? onRejected(err) : err)
-                }
-            )
+                    if (onRejected) {
+                        resolve(onRejected(err))
+                    } else {
+                        reject(err)
+                    }
+                })
         })
         return promise
     }
