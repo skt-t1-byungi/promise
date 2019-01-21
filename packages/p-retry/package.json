@@ -2,6 +2,9 @@
     "name": "@byungi/p-retry",
     "description": "Retry when promise fails.",
     "version": "0.0.2",
+    "engines": {
+        "node": ">= 8"
+    },
     "keywords": [
         "promise",
         "retry",

@@ -2,6 +2,9 @@
     "name": "@byungi/p-while",
     "description": "A promise for an asynchronous while loop.",
     "version": "0.0.2",
+    "engines": {
+        "node": ">= 8"
+    },
     "keywords": [
         "promise",
         "while",

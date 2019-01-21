@@ -2,6 +2,9 @@
     "name": "@byungi/p-delay",
     "description": "A delayed promise.",
     "version": "0.0.2",
+    "engines": {
+        "node": ">= 8"
+    },
     "keywords": [
         "promise",
         "delay",
