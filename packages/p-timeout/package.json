@@ -1,7 +1,7 @@
 {
     "name": "@byungi/p-timeout",
     "description": "Promise timeout after specified time.",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "keywords": [
         "promise",
         "timeout",
@@ -22,10 +22,10 @@
     ],
     "types": "index.d.ts",
     "dependencies": {
-        "@byungi/promise-helpers": "^0.0.1"
+        "@byungi/promise-helpers": "^0.0.2"
     },
     "devDependencies": {
-        "@byungi/p-delay": "^0.0.1"
+        "@byungi/p-delay": "^0.0.2"
     },
     "publishConfig": {
         "access": "public"
