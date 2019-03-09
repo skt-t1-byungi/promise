@@ -50,7 +50,7 @@ class PWhile<ConditionResult extends boolean, LoopResult> extends PCancel<LoopRe
     }
 }
 
-export const pWhile = <T1 extends boolean, T2>(condition: Runner<T1>, action: Runner<T2>, { interval = 0 } = {}) => {
+export function pWhile <T1 extends boolean, T2> (condition: Runner<T1>, action: Runner<T2>, { interval = 0 } = {}) {
     return new PWhile(condition, action, { interval })
 }
 
