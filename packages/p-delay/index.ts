@@ -1,4 +1,4 @@
-import { assert, ResolveFn } from '@byungi/promise-helpers'
+import { assert, Resolver } from '@byungi/promise-helpers'
 
 interface DelayPromise extends Promise<void> {
     clear (): void
@@ -10,7 +10,7 @@ export const pDelay = <T extends boolean | undefined>(
 ): T extends true ? DelayPromise : Promise<void> => {
     assert('ms', 'number', ms)
 
-    let resolve!: ResolveFn<void>
+    let resolve!: Resolver<void>
     const p = new Promise<void>((_resolve) => resolve = _resolve)
     let timer: number | null = setTimeout(resolve, ms)
 

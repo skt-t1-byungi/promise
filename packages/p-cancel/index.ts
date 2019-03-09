@@ -1,10 +1,10 @@
 import {
     assert,
-    OnFinallyFn,
-    OnFulfilledFn,
-    OnRejectedFn,
-    RejectFn,
-    ResolveFn
+    OnFinally,
+    OnFulfilled,
+    OnRejected,
+    Rejector,
+    Resolver
 } from '@byungi/promise-helpers'
 import Deferred from 'p-state-defer'
 
@@ -24,7 +24,7 @@ export class PCancel<T> {
     private _isCanceled = false
     private _cancelHandlers: CancelHandler[] = []
 
-    constructor (executor: (resolve: ResolveFn<T>, reject: RejectFn, onCancel: AddCancelHandler) => void) {
+    constructor (executor: (resolve: Resolver<T>, reject: Rejector, onCancel: AddCancelHandler) => void) {
         const defer = this._defer = new Deferred()
         executor(defer.resolve.bind(defer), defer.reject.bind(defer), fn => {
             assert('onCancel argument', 'function', fn)
@@ -32,15 +32,15 @@ export class PCancel<T> {
         })
     }
 
-    public then<TR1= T, TR2= never> (onFulfilled?: OnFulfilledFn<T,TR1>, onRejected?: OnRejectedFn<TR2>) {
+    public then<TR1= T, TR2= never> (onFulfilled?: OnFulfilled<T,TR1>, onRejected?: OnRejected<TR2>) {
         return this._defer.promise.then(onFulfilled, onRejected)
     }
 
-    public catch<TR> (onRejected: OnRejectedFn<TR>) {
+    public catch<TR> (onRejected: OnRejected<TR>) {
         return this._defer.promise.catch(onRejected)
     }
 
-    public pipe<TR1= T, TR2= never> (onFulfilled?: OnFulfilledFn<T,TR1>, onRejected?: OnRejectedFn<TR2>) {
+    public pipe<TR1= T, TR2= never> (onFulfilled?: OnFulfilled<T,TR1>, onRejected?: OnRejected<TR2>) {
         if (onFulfilled) assert('onFulfilled', 'function', onFulfilled)
         if (onRejected) assert('onRejected', 'function', onRejected)
 
@@ -63,7 +63,7 @@ export class PCancel<T> {
         return promise
     }
 
-    public finally (onFinally?: OnFinallyFn) {
+    public finally (onFinally?: OnFinally) {
         if (onFinally) assert('onFinally', 'function', onFinally)
         return this.then(
             val => Promise.resolve(onFinally && onFinally()).then(() => val),
