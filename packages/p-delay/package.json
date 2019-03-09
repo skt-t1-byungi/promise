@@ -25,6 +25,7 @@
     ],
     "types": "index.d.ts",
     "dependencies": {
+        "@byungi/p-class": "^0.0.3",
         "@byungi/promise-helpers": "^0.0.3"
     },
     "publishConfig": {

@@ -14,7 +14,7 @@ test('basic', async t => {
 
 test('clear', async t => {
     const end = m()
-    const p = pDelay(200, { clearable: true })
+    const p = pDelay(200)
     t.pass()
     await pDelay(100)
     p.clear()

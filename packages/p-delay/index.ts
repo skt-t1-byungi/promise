@@ -1,29 +1,28 @@
 import { assert, Resolver } from '@byungi/promise-helpers'
+import PClass from '@byungi/p-class'
 
-interface DelayPromise extends Promise<void> {
-    clear (): void
-}
+export class DelayPromise extends PClass<void> {
+    private _timerId: number
+    private _resolve: Resolver<void>
 
-export const pDelay = <T extends boolean | undefined>(
-    ms: number,
-    { clearable= false }: {clearable?: T} = {}
-): T extends true ? DelayPromise : Promise<void> => {
-    assert('ms', 'number', ms)
+    constructor (ms: number) {
+        let _timerId!: number
+        let _resolve: any
 
-    let resolve!: Resolver<void>
-    const p = new Promise<void>((_resolve) => resolve = _resolve)
-    let timer: number | null = setTimeout(resolve, ms)
+        super(resolve => {
+            _timerId = setTimeout(_resolve = resolve, ms)
+        })
 
-    if (clearable) {
-        (p as DelayPromise).clear = () => {
-            if (!timer) return
-            clearTimeout(timer)
-            timer = null
-            resolve()
-        }
+        this._timerId = _timerId
+        this._resolve = _resolve
     }
 
-    return (p as any)
+    public clear () {
+        clearTimeout(this._timerId)
+        this._resolve()
+    }
 }
+
+export const pDelay = (ms: number) => new DelayPromise(ms)
 
 export default pDelay

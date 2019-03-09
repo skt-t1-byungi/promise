@@ -13,13 +13,14 @@ import pDelay from '@byungi/p-delay';
 ```
 
 ## API
-### pDelay(ms [, options])
+### pDelay(ms)
 Create a delayed promise.
 
-#### options
-- `clearable` - If true, returns a delayed promise that can be cleared. Default is false.
+### promise.clear()
+Clears the set timer and resolves promise.
+
 ```js
-const delayPromise = pDelay(500, {clearable: true})
+const delayPromise = pDelay(500)
 
 setTimeout(()=>{
     delayPromise.clear() //delayPromise is resolved after 200ms.
