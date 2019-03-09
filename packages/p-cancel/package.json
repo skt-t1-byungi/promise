@@ -26,8 +26,8 @@
     ],
     "types": "index.d.ts",
     "dependencies": {
-        "@byungi/promise-helpers": "^0.0.3",
-        "p-state-defer": "^1.0.1"
+        "@byungi/p-class": "^0.0.3",
+        "@byungi/promise-helpers": "^0.0.3"
     },
     "publishConfig": {
         "access": "public"

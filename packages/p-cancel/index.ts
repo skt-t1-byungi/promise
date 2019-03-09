@@ -1,91 +1,90 @@
-import {
-    assert,
-    OnFinally,
-    OnFulfilled,
-    OnRejected,
-    Rejector,
-    Resolver
-} from '@byungi/promise-helpers'
-import Deferred from 'p-state-defer'
+import { assert, OnFulfilled, OnRejected, Rejector, Resolver } from '@byungi/promise-helpers'
+import PClass from '@byungi/p-class'
 
-type CancelHandler = () => void
-type AddCancelHandler = (fn: CancelHandler) => void
+type Canceler = () => void
+type PCancelExecutor<T> = (resolve: Resolver<T>, reject: Rejector, onCancel: (fn: Canceler) => void) => void
 
 export class CancelError extends Error {
     public readonly isCanceled = true
 
-    constructor (reason = 'promise cancelled.') {
+    constructor (reason = 'promise was canceled.') {
         super(reason)
+        this.name = 'CancelError'
     }
 }
 
-export class PCancel<T> {
-    protected _defer: Deferred<T>
-    private _isCanceled = false
-    private _cancelHandlers: CancelHandler[] = []
+export class PCancel<T> extends PClass<T> {
+    private _isPending: boolean
+    private _isCanceled: boolean
+    private _cancelers: Canceler[]
+    private _reject: Rejector
 
-    constructor (executor: (resolve: Resolver<T>, reject: Rejector, onCancel: AddCancelHandler) => void) {
-        const defer = this._defer = new Deferred()
-        executor(defer.resolve.bind(defer), defer.reject.bind(defer), fn => {
-            assert('onCancel argument', 'function', fn)
-            this._cancelHandlers.push(fn)
-        })
-    }
+    constructor (executor: PCancelExecutor<T>) {
+        let _reject: any
+        const _cancelers: Canceler[] = []
 
-    public then<TR1= T, TR2= never> (onFulfilled?: OnFulfilled<T,TR1>, onRejected?: OnRejected<TR2>) {
-        return this._defer.promise.then(onFulfilled, onRejected)
-    }
+        super((resolve, reject) => {
+            _reject = reject
 
-    public catch<TR> (onRejected: OnRejected<TR>) {
-        return this._defer.promise.catch(onRejected)
-    }
-
-    public pipe<TR1= T, TR2= never> (onFulfilled?: OnFulfilled<T,TR1>, onRejected?: OnRejected<TR2>) {
-        if (onFulfilled) assert('onFulfilled', 'function', onFulfilled)
-        if (onRejected) assert('onRejected', 'function', onRejected)
-
-        const promise = new PCancel<TR1 | TR2>((resolve, reject, onCancel) => {
-            onCancel(this.cancel.bind(this))
-            this._defer.promise.then(
-                val => {
-                    if (promise.isCanceled) return
-                    resolve((onFulfilled ? onFulfilled(val) : val) as TR1)
+            executor(
+                value => {
+                    this._isPending = false
+                    resolve(value)
                 },
-                err => {
-                    if (promise.isCanceled) return
-                    if (onRejected) {
-                        resolve(onRejected(err))
-                    } else {
-                        reject(err)
-                    }
-                })
+                reason => {
+                    this._isPending = false
+                    reject(reason)
+                },
+                fn => {
+                    _cancelers.push(fn)
+                }
+            )
         })
-        return promise
-    }
 
-    public finally (onFinally?: OnFinally) {
-        if (onFinally) assert('onFinally', 'function', onFinally)
-        return this.then(
-            val => Promise.resolve(onFinally && onFinally()).then(() => val),
-            err => Promise.resolve(onFinally && onFinally()).then(() => { throw err })
-        )
+        this._reject = _reject
+        this._isPending = true
+        this._isCanceled = false
+        this._cancelers = _cancelers
     }
 
     get isCanceled () {
         return this._isCanceled
     }
 
-    public cancel (reason?: string) {
-        if (this._defer.isCompleted || this.isCanceled) return
+    public cancel (reason?: any) {
+        if (!this._isPending || this._isCanceled) return
         this._isCanceled = true
 
         try {
-            this._cancelHandlers.forEach(fn => fn())
-        } catch (err) {
-            this._defer.reject(err)
+            this._cancelers.forEach(canceler => canceler())
+        } catch (error) {
+            this._reject(error)
         }
 
-        if (!this._defer.isCompleted) this._defer.reject(new CancelError(reason))
+        this._reject(new CancelError(reason))
+    }
+
+    public pipe<TR1= T, TR2= never> (onfulfilled?: OnFulfilled<T,TR1>, onrejected?: OnRejected<TR2>) {
+        if (onfulfilled) assert('onfulfilled', 'function', onfulfilled)
+        if (onrejected) assert('onrejected', 'function', onrejected)
+
+        return new PCancel<TR1 | TR2>((resolve, reject, onCancel) => {
+            onCancel(() => this.cancel())
+
+            this.then(
+                val => {
+                    if (this._isCanceled) return
+                    resolve((onfulfilled ? onfulfilled(val) : val) as TR1)
+                },
+                err => {
+                    if (this._isCanceled) return
+                    if (onrejected) {
+                        resolve(onrejected(err))
+                    } else {
+                        reject(err)
+                    }
+                })
+        })
     }
 }
 
