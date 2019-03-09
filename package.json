@@ -1,4 +1,5 @@
 {
+    "name": "@byungi/promise",
     "private": true,
     "workspaces": [
         "packages/*"
@@ -32,6 +33,5 @@
         "sources": [
             "packages/*/*.ts"
         ]
-    },
-    "name": "promise"
+    }
 }

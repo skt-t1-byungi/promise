@@ -1,4 +1,4 @@
-import { assert, Resolver } from '@byungi/promise-helpers'
+import { Resolver } from '@byungi/promise-helpers'
 import PClass from '@byungi/p-class'
 
 export class DelayPromise extends PClass<void> {
