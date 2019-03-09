@@ -7,7 +7,7 @@ export class PClass<T> {
         this._promise = new Promise(executor)
     }
 
-    public get promise () {
+    public get originalPromise () {
         return this._promise
     }
 
