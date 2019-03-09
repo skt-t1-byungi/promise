@@ -11,10 +11,13 @@ test('basic', async t => {
     let calls = 0
     let i = 0
 
-    const result = await pWhile(() => ++i < 10, () => {
-        calls++
-        return 'hello'
-    })
+    const result = await pWhile(
+        () => ++i < 10,
+        () => {
+            calls++
+            return 'hello'
+        }
+    )
 
     t.is(calls, 9)
     t.is(i, 10)

@@ -19,7 +19,9 @@ test('isThenable', t => {
 
 test('isCancelable', t => {
     const p = new Promise(() => { return })
+    const cancel = () => undefined
+
     t.false(isCancellable(p))
-    t.false(isCancellable({ cancel () { return } }))
-    t.true(isCancellable(Object.assign(p, { cancel () { return } })))
+    t.false(isCancellable({ cancel }))
+    t.true(isCancellable(Object.assign(p, { cancel })))
 })

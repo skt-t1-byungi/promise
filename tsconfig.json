@@ -5,7 +5,6 @@
         "lib": ["esnext", "dom"],
         "declaration": true,
         "strict": true,
-        "esModuleInterop": true,
         "allowJs": false
     },
     "exclude": [
