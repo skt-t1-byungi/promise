@@ -1,7 +1,7 @@
 {
     "name": "@byungi/p-while",
     "description": "A promise for an asynchronous while loop.",
-    "version": "0.0.3",
+    "version": "0.1.0",
     "engines": {
         "node": ">= 8"
     },
@@ -24,9 +24,9 @@
     ],
     "types": "index.d.ts",
     "dependencies": {
-        "@byungi/p-cancel": "^0.0.3",
-        "@byungi/p-delay": "^0.0.3",
-        "@byungi/promise-helpers": "^0.0.3"
+        "@byungi/p-cancel": "^0.1.0",
+        "@byungi/p-delay": "^0.1.0",
+        "@byungi/promise-helpers": "^0.1.0"
     },
     "publishConfig": {
         "access": "public"
