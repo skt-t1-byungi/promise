@@ -1,0 +1,33 @@
+{
+    "name": "@byungi/p-class",
+    "description": "A inheritable promise.",
+    "version": "0.0.3",
+    "engines": {
+        "node": ">= 8"
+    },
+    "keywords": [
+        "promise",
+        "class",
+        "inherit",
+        "extends",
+        "extend"
+    ],
+    "author": {
+        "email": "tiniwz@gmail.com",
+        "name": "skt-t1-byungi"
+    },
+    "repository": "https://github.com/skt-t1-byungi/promise/tree/master/packages/p-class",
+    "main": "index.js",
+    "license": "MIT",
+    "files": [
+        "index.js",
+        "index.d.ts"
+    ],
+    "types": "index.d.ts",
+    "dependencies": {
+        "@byungi/promise-helpers": "^0.0.3"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

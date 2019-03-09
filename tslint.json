@@ -1,6 +1,7 @@
 {
     "extends": "tslint-config-byungi",
     "rules": {
-        "max-classes-per-file": false
+        "max-classes-per-file": false,
+        "await-promise": [true, "PClass"]
     }
 }

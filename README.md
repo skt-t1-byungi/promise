@@ -6,6 +6,7 @@
 Old browsers need `promise polyfill` and `babel`.
 
 ## Packages
+- [p-class](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-class) - A inheritable promise.
 - [p-cancel](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-cancel) - A cancelable promise.
 - [p-delay](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-delay) - A delayed promise.
 - [p-retry](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-retry) - Retry when promise fails.
