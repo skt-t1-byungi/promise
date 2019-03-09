@@ -1,7 +1,7 @@
 {
     "name": "@byungi/p-delay",
     "description": "A delayed promise.",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "engines": {
         "node": ">= 8"
     },
@@ -25,7 +25,7 @@
     ],
     "types": "index.d.ts",
     "dependencies": {
-        "@byungi/p-class": "^0.1.0",
+        "@byungi/p-class": "^0.1.1",
         "@byungi/promise-helpers": "^0.1.0"
     },
     "publishConfig": {
