@@ -1,4 +1,3 @@
-import pDelay from '@byungi/p-delay'
 import test from 'ava'
 import pWhile from '.'
 

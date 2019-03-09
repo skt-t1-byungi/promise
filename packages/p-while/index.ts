@@ -1,59 +1,57 @@
 import PCancel from '@byungi/p-cancel'
 import pDelay from '@byungi/p-delay'
-import { isCancellable } from '@byungi/promise-helpers'
+import { isCancellable, Resolver } from '@byungi/promise-helpers'
 
 export { CancelError } from '@byungi/p-cancel'
 
-type Param<T> = (() => T) | (() => PromiseLike<T>) | PromiseLike<T> | T
+type Runner<T> = (() => T) | (() => PromiseLike<T>) | T
 
-export const ensurePromiseReturn = <T>(fn: Param<T>) => () => {
-    // Function intersections issue : https://github.com/Microsoft/TypeScript/issues/26970
-    return Promise.resolve(typeof fn === 'function' ? (fn as (() => T))() : fn)
-}
+class PWhile<ConditionResult extends boolean, LoopResult> extends PCancel<LoopResult | undefined> {
+    private _prevResult?: LoopResult
+    private _resolve: Resolver<LoopResult | undefined>
 
-class PWhile<T1 extends boolean, T2> extends PCancel<T2 | null> {
-    private _prevResult: T2 | null = null
+    constructor (condition: Runner<ConditionResult>, action: Runner<LoopResult>, { interval = 0 }: {interval?: number} = {}) {
+        let _resolve: any
 
-    constructor (condition: Param<T1>, action: Param<T2>, { interval }: {interval: number}) {
         super((resolve, reject, onCancel) => {
-            const wrappedCondition = ensurePromiseReturn(condition)
-            const wrappedAction = ensurePromiseReturn(action)
-
-            let currPromise: PromiseLike<any>
+            _resolve = resolve
+            let runningPromise: PromiseLike<any>
             let isCanceled = false
 
             onCancel(() => {
                 isCanceled = true
-                if (isCancellable(currPromise)) currPromise.cancel()
+                if (isCancellable(runningPromise)) runningPromise.cancel()
             })
 
-            const run = <T>(promise: PromiseLike<T>, fn: (result: T) => void) => {
+            const run = <T>(promise: Runner<T>, then: (result: T) => void) => {
                 if (isCanceled) return
-                (currPromise = promise).then(fn, reject)
+                if (typeof promise === 'function') promise = (promise as () => T)();
+                (runningPromise = Promise.resolve(promise)).then(then, reject)
             }
 
-            const runner = () =>
-                run(wrappedCondition(), isContinue => {
+            const loop = () =>
+                run(condition, isContinue => {
                     if (!isContinue) return resolve(this._prevResult)
-                    run(wrappedAction(), result => {
+                    run(action, result => {
                         this._prevResult = result
-                        run(pDelay(interval), runner)
+                        run(pDelay(interval), loop)
                     })
                 })
 
-            runner()
+            loop()
         })
+
+        this._prevResult = undefined
+        this._resolve = _resolve
     }
 
     public break () {
-        this._defer.resolve(this._prevResult)
+        this._resolve(this._prevResult)
     }
 }
 
-export const pWhile = <T1 extends boolean, T2>(
-    condition: Param<T1>,
-    action: Param<T2>,
-    { interval = 0 } = {}
-) => new PWhile(condition, action, { interval })
+export const pWhile = <T1 extends boolean, T2>(condition: Runner<T1>, action: Runner<T2>, { interval = 0 } = {}) => {
+    return new PWhile(condition, action, { interval })
+}
 
 export default pWhile
