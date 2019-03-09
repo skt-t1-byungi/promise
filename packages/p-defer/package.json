@@ -1,0 +1,31 @@
+{
+    "name": "@byungi/p-defer",
+    "description": "A deferred promise.",
+    "version": "0.1.0",
+    "engines": {
+        "node": ">= 8"
+    },
+    "keywords": [
+        "promise",
+        "deferred",
+        "defer"
+    ],
+    "author": {
+        "email": "tiniwz@gmail.com",
+        "name": "skt-t1-byungi"
+    },
+    "repository": "https://github.com/skt-t1-byungi/promise/tree/master/packages/p-defer",
+    "main": "index.js",
+    "license": "MIT",
+    "files": [
+        "index.js",
+        "index.d.ts"
+    ],
+    "types": "index.d.ts",
+    "dependencies": {
+        "@byungi/promise-helpers": "^0.1.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
