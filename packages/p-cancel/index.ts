@@ -35,8 +35,9 @@ export class PCancel<T> extends PClass<T> {
                     this._isPending = false
                     reject(reason)
                 },
-                fn => {
-                    _cancelers.push(fn)
+                canceler => {
+                    assert('canceler', 'function', canceler)
+                    _cancelers.push(canceler)
                 }
             )
         })
