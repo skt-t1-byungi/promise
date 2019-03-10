@@ -1,6 +1,6 @@
 import { Executor, OnRejected, OnFulfilled, OnFinally } from '@byungi/promise-helpers'
 
-export class PClass<T> {
+export class PClass<T>{
     private _promise: Promise<T>
 
     constructor (executor: Executor<T>) {
@@ -22,7 +22,9 @@ export class PClass<T> {
     public finally (onfinally?: OnFinally | null) {
         return this._promise.finally(onfinally)
     }
-
 }
+
+// for await-promise lint rule
+export declare interface PClass<T> extends Promise<T>{}
 
 export default PClass
