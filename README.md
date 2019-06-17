@@ -3,8 +3,6 @@
 
 ![witch](./witch.png)
 
-Old browsers need `promise polyfill` and `babel`.
-
 ## Packages
 - [p-cancel](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-cancel) - A cancelable promise.
 - [p-class](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-class) - A inheritable promise.
@@ -13,7 +11,6 @@ Old browsers need `promise polyfill` and `babel`.
 - [p-retry](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-retry) - Retry when promise fails.
 - [p-timeout](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-timeout) - Promise timeout after specified time.
 - [p-while](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-while) - A promise for an asynchronous while loop.
-
 
 ## License
 MIT
