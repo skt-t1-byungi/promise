@@ -1,5 +1,5 @@
 # @byungi/p-await-of
-Promises wrapper to return an error like Go.
+Promise wrapper to return an error like Go.
 
 ## Example
 #### Before

@@ -1,6 +1,6 @@
 {
     "name": "@byungi/p-await-of",
-    "description": "Promises wrapper to return an error like Go.",
+    "description": "Promise wrapper to return an error like Go.",
     "version": "0.1.3",
     "engines": {
         "node": ">= 8"
