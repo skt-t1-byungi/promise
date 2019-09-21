@@ -12,24 +12,23 @@ class PWhile<ConditionResult extends boolean, LoopResult> extends PCancel<LoopRe
 
     constructor (condition: Runner<ConditionResult>, action: Runner<LoopResult>, { interval = 0 }: {interval?: number} = {}) {
         let _resolve: any
+        let loop!: () => void
 
         super((resolve, reject, onCancel) => {
             _resolve = resolve
             let runningPromise: PromiseLike<any>
-            let isCanceled = false
 
             onCancel(() => {
-                isCanceled = true
                 if (isCancellable(runningPromise)) runningPromise.cancel()
             })
 
             const run = <T>(promise: Runner<T>, then: (result: T) => void) => {
-                if (isCanceled) return
+                if (this.isCanceled) return
                 if (typeof promise === 'function') promise = (promise as () => T)();
                 (runningPromise = Promise.resolve(promise)).then(then, reject)
             }
 
-            const loop = () =>
+            loop = () => {
                 run(condition, isContinue => {
                     if (!isContinue) return resolve(this._prevResult)
                     run(action, result => {
@@ -37,12 +36,13 @@ class PWhile<ConditionResult extends boolean, LoopResult> extends PCancel<LoopRe
                         run(pDelay(interval), loop)
                     })
                 })
-
-            loop()
+            }
         })
 
         this._prevResult = undefined
         this._resolve = _resolve
+
+        loop()
     }
 
     public break () {
