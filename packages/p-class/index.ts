@@ -25,6 +25,6 @@ export class PClass<T>{
 }
 
 // for await-promise lint rule
-export declare interface PClass<T> extends Promise<T>{}
+export interface PClass<T> extends Promise<T>{}
 
 export default PClass
