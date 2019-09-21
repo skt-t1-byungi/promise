@@ -6,7 +6,7 @@ export { CancelError } from '@byungi/p-cancel'
 export const pRetry = <T>(runner: () => PromiseLike<T> | CancellablePromise<T> , { retries = 1, interval = 0 } = {}) =>
     new PCancel((resolve, reject, onCancel) => {
         let promise: PromiseLike<T> | CancellablePromise<T>
-        let timer: number
+        let timer: ReturnType<typeof setTimeout>
         let isCanceled = false
 
         onCancel(() => {

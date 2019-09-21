@@ -11,13 +11,13 @@
         "publish": "yarn test && yarn build && lerna publish"
     },
     "devDependencies": {
-        "ava": "^2.1.0",
-        "del-cli": "^2.0.0",
-        "lerna": "^3.15.0",
-        "ts-node": "^8.0.3",
-        "tslint": "^5.13.1",
+        "ava": "^2.4.0",
+        "del-cli": "^3.0.0",
+        "lerna": "^3.16.4",
+        "ts-node": "^8.4.1",
+        "tslint": "^5.20.0",
         "tslint-config-byungi": "^0.1.1",
-        "typescript": "^3.3.3333"
+        "typescript": "^3.6.3"
     },
     "ava": {
         "compileEnhancements": false,
