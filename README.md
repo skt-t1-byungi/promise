@@ -4,7 +4,7 @@
 ![witch](./witch.png)
 
 ## Packages
-- [p-await-of](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-await-of) - Promises wrapper to return an error like Go.
+- [p-await-of](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-await-of) - Promise wrapper to return an error like Go.
 - [p-cancel](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-cancel) - A cancelable promise.
 - [p-class](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-class) - A inheritable promise.
 - [p-defer](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-defer) - A deferred promise.
