@@ -1,19 +1,17 @@
 import test from 'ava'
 import pRetry from '.'
 
-const m = (tries: number) => () => Promise.resolve().then(() => {
-    if (tries--) throw new Error('retry')
-})
+const m = (tries: number) => async () => { if (tries--) throw new Error('retry') }
 
 test('trier test', async t => {
-    const trier1 = m(1)
-    await t.throwsAsync(trier1())
-    await t.notThrowsAsync(trier1())
+    const try1 = m(1)
+    await t.throwsAsync(try1())
+    await t.notThrowsAsync(try1())
 
-    const trier2 = m(2)
-    await t.throwsAsync(trier2())
-    await t.throwsAsync(trier2())
-    await t.notThrowsAsync(trier2())
+    const try2 = m(2)
+    await t.throwsAsync(try2())
+    await t.throwsAsync(try2())
+    await t.notThrowsAsync(try2())
 })
 
 test('basic', async t => {

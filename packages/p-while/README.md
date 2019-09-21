@@ -9,18 +9,20 @@ let tries = 0
 
 const loopPromise = pWhile(
     async () => {
-        return await asyncReturnFalse() && (++tries < 10)
+        return (await asyncAlwaysTrue()) && (++tries < 10)
     },
     async () => {
         const jobResult = await asyncJob()
+
         if(!jobResult) loopPromise.break() // Stop the asynchronous loop.
+
         return jobResult
     }
 )
 
 loopPromise.then(lastJobResult => {
     // Get the last return value.
-    // If the action function has never been called, It is null.
+    // If the action function has never been called, It is undefined.
 })
 ```
 ## API
@@ -46,7 +48,7 @@ setTimeout(()=> loopPromise.cancel(), 100) // After 100ms, the loop stops.
 loopPromise.catch(err => {
     console.log(err.isCanceled) // => true
     console.log(err instanceof CancelError) // => true
-    console.log(retryPromise.isCanceled) // => true
+    console.log(loopPromise.isCanceled) // => true
 })
 ```
 

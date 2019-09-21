@@ -3,7 +3,7 @@ import PCancel, { CancelError } from './index'
 
 test('basic', async t => {
     t.plan(4)
-    const p = new PCancel((resolve, reject, onCancel) => onCancel(() => t.pass()))
+    const p = new PCancel((_, __, onCancel) => onCancel(() => t.pass()))
 
     t.false(p.isCanceled)
     p.cancel()
@@ -13,7 +13,7 @@ test('basic', async t => {
 
 test('pipe', async t => {
     t.plan(9)
-    const p = new PCancel((resolve, reject, onCancel) => onCancel(() => t.pass()))
+    const p = new PCancel((_, __, onCancel) => onCancel(() => t.pass()))
     const np = p.pipe(() => undefined)
     const npp = np.pipe(() => undefined, () => t.fail())
 
@@ -37,7 +37,7 @@ test('An error should not be propagated if catch by a pipe.', async t => {
 
 test('finally', async t => {
     t.plan(2)
-    const p = new PCancel((resolve, reject, onCancel) => onCancel(() => undefined))
+    const p = new PCancel((_, __, onCancel) => onCancel(() => undefined))
     p.cancel()
     await t.throwsAsync(p.finally(() => t.pass()))
 })

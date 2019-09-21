@@ -58,8 +58,8 @@ export class PCancel<T> extends PClass<T> {
 
         try {
             this._cancelers.forEach(canceler => canceler())
-        } catch (error) {
-            this._reject(error)
+        } catch (err) {
+            this._reject(err)
         }
 
         this._reject(new CancelError(reason))
