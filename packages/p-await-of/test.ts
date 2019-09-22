@@ -10,3 +10,8 @@ test('await-of', async t => {
     t.falsy(res2)
     t.is(err2, 'test')
 })
+
+test('handling empty error', async t => {
+    const [, err] = await of(Promise.reject())
+    t.truthy(err)
+})
