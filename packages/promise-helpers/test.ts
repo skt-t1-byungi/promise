@@ -8,17 +8,17 @@ test('assert', t => {
     t.throws(() => assert('bbb', 'function', 1), txt('bbb', 'function', 'number'))
     t.throws(() => assert('ccc', 'number', {}), txt('ccc', 'number', 'object'))
     t.notThrows(() => assert('aaa', 'string', '1'))
-    t.notThrows(() => assert('aaa', 'function', () => { return }))
+    t.notThrows(() => assert('aaa', 'function', () => { }))
     t.notThrows(() => assert('aaa', 'object', {}))
 })
 
 test('isThenable', t => {
-    t.true(isThenable(new Promise(() => { return })))
+    t.true(isThenable(new Promise(() => { })))
     t.false(isThenable({}))
 })
 
 test('isCancelable', t => {
-    const p = new Promise(() => { return })
+    const p = new Promise(() => { })
     const cancel = () => undefined
 
     t.false(isCancellable(p))

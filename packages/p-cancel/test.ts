@@ -1,5 +1,5 @@
 import test from 'ava'
-import PCancel, { CancelError } from './index'
+import PCancel, { CancelError } from '.'
 
 test('basic', async t => {
     t.plan(4)

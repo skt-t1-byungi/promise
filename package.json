@@ -13,10 +13,10 @@
     "devDependencies": {
         "ava": "^2.4.0",
         "del-cli": "^3.0.0",
+        "eslint": "^6.5.1",
+        "eslint-config-byungi": "^0.7.4",
         "lerna": "^3.16.4",
         "ts-node": "^8.4.1",
-        "tslint": "^5.20.0",
-        "tslint-config-byungi": "^0.1.1",
         "typescript": "^3.6.3"
     },
     "ava": {

@@ -1,0 +1,12 @@
+{
+    "extends": "byungi/typescript",
+    "rules": {
+        "ava/no-ignored-test-files": [
+            "error",
+            {
+                "extensions": ["ts"],
+                "files": ["test.ts"]
+            }
+        ]
+    }
+}

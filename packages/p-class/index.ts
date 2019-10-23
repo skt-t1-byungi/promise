@@ -1,6 +1,6 @@
 import { Executor, OnRejected, OnFulfilled, OnFinally } from '@byungi/promise-helpers'
 
-export class PClass<T>{
+export class PClass<T> {
     private _promise: Promise<T>
 
     constructor (executor: Executor<T>) {
@@ -11,7 +11,7 @@ export class PClass<T>{
         return this._promise
     }
 
-    public then<TR1= T, TR2= never> (onfulfilled?: OnFulfilled<T,TR1> | null , onrejected?: OnRejected<TR2> | null) {
+    public then<TR1= T, TR2= never> (onfulfilled?: OnFulfilled<T, TR1> | null, onrejected?: OnRejected<TR2> | null) {
         return this._promise.then(onfulfilled, onrejected)
     }
 
@@ -24,7 +24,7 @@ export class PClass<T>{
     }
 }
 
-// for await-promise lint rule
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface PClass<T> extends Promise<T>{}
 
 export default PClass

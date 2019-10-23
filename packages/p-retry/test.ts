@@ -1,6 +1,7 @@
 import test from 'ava'
 import pRetry from '.'
 
+// eslint-disable-next-line require-await
 const m = (tries: number) => async () => { if (tries--) throw new Error('retry') }
 
 test('trier test', async t => {

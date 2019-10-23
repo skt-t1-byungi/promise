@@ -65,7 +65,7 @@ export class PCancel<T> extends PClass<T> {
         this._reject(new CancelError(reason))
     }
 
-    public pipe<TR1= T, TR2= never> (onfulfilled?: OnFulfilled<T,TR1>, onrejected?: OnRejected<TR2>) {
+    public pipe<TR1= T, TR2= never> (onfulfilled?: OnFulfilled<T, TR1>, onrejected?: OnRejected<TR2>) {
         if (onfulfilled) assert('onfulfilled', 'function', onfulfilled)
         if (onrejected) assert('onrejected', 'function', onrejected)
 
