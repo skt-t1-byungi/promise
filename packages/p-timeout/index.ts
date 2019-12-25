@@ -1,11 +1,11 @@
 import { CancellablePromise, isCancellable } from '@byungi/promise-helpers'
 
 export class TimeoutError extends Error {
-    public readonly isTimeout = true
+     readonly isTimeout = true
 
-    constructor (reason = 'promise timeout.') {
-        super(reason)
-    }
+     constructor (reason = 'promise timeout.') {
+         super(reason)
+     }
 }
 
 export const pTimeout = <T>(promise: PromiseLike<T> | CancellablePromise<T>, ms: number) =>

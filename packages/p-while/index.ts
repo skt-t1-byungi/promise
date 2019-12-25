@@ -45,7 +45,7 @@ class PWhile<ConditionResult extends boolean, LoopResult> extends PCancel<LoopRe
         loop()
     }
 
-    public break () {
+    break () {
         this._resolve(this._prevResult)
     }
 }

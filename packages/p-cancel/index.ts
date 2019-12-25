@@ -5,12 +5,12 @@ type Canceler = () => void
 type PCancelExecutor<T> = (resolve: Resolver<T>, reject: Rejector, onCancel: (fn: Canceler) => void) => void
 
 export class CancelError extends Error {
-    public readonly isCanceled = true
+     readonly isCanceled = true
 
-    constructor (reason = 'promise was canceled.') {
-        super(reason)
-        this.name = 'CancelError'
-    }
+     constructor (reason = 'promise was canceled.') {
+         super(reason)
+         this.name = 'CancelError'
+     }
 }
 
 export class PCancel<T> extends PClass<T> {

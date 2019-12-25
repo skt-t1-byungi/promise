@@ -17,7 +17,7 @@ export class DelayPromise extends PClass<void> {
         this._resolve = _resolve
     }
 
-    public clear () {
+    clear () {
         clearTimeout(this._timerId)
         this._resolve()
     }

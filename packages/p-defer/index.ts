@@ -22,11 +22,11 @@ export class Deferred<T> {
         return this._promise
     }
 
-    public resolve (value: T) {
+    resolve (value: T) {
         return this._resolve(value)
     }
 
-    public reject (reason?: any) {
+    reject (reason?: any) {
         return this._reject(reason)
     }
 }
