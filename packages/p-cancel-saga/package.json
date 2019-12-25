@@ -1,0 +1,40 @@
+{
+    "name": "@byungi/p-cancel-saga",
+    "description": "A cancelable promise with saga.",
+    "version": "0.1.3",
+    "engines": {
+        "node": ">= 8"
+    },
+    "keywords": [
+        "promise",
+        "cancel",
+        "cancelable",
+        "cancellable",
+        "cancellation",
+        "abort",
+        "generator",
+        "saga"
+    ],
+    "author": {
+        "email": "tiniwz@gmail.com",
+        "name": "skt-t1-byungi"
+    },
+    "repository": "https://github.com/skt-t1-byungi/promise/tree/master/packages/p-cancel-saga",
+    "main": "index.js",
+    "license": "MIT",
+    "files": [
+        "index.js",
+        "index.d.ts"
+    ],
+    "types": "index.d.ts",
+    "dependencies": {
+        "@byungi/p-cancel": "^0.1.3",
+        "@byungi/promise-helpers": "^0.1.0"
+    },
+    "devDependencies": {
+        "@byungi/p-delay": "^0.1.3"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
