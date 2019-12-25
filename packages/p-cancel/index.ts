@@ -52,7 +52,7 @@ export class PCancel<T> extends PClass<T> {
         return this._isCanceled
     }
 
-    public cancel (reason?: any) {
+    cancel (reason?: any) {
         if (!this._isPending || this._isCanceled) return
         this._isCanceled = true
 
@@ -65,7 +65,7 @@ export class PCancel<T> extends PClass<T> {
         this._reject(new CancelError(reason))
     }
 
-    public pipe<TR1= T, TR2= never> (onfulfilled?: OnFulfilled<T, TR1>, onrejected?: OnRejected<TR2>) {
+    pipe<TR1= T, TR2= never> (onfulfilled?: OnFulfilled<T, TR1>, onrejected?: OnRejected<TR2>) {
         if (onfulfilled) assert('onfulfilled', 'function', onfulfilled)
         if (onrejected) assert('onrejected', 'function', onrejected)
 
