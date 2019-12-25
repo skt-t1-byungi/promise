@@ -26,7 +26,7 @@ export function pCancelSaga<T> (saga: () => Generator<any, T>|AsyncGenerator<any
         function next (arg?: any) {
             pRes = iter.next(arg)
             if (!isThenable(pRes)) pRes = Promise.resolve(pRes)
-            pRes.then(onResolved, onRejected)
+            pRes.then(onResolved, reject)
         }
 
         function onResolved (res: IteratorResult<any>) {
