@@ -1,7 +1,7 @@
 # @byungi/promise
 > A promise collection.
 
-![witch](./witch.png)
+![promise](./promise.gif)
 
 ## Packages
 - [p-await-of](https://github.com/skt-t1-byungi/promise/tree/master/packages/p-await-of) - Promise wrapper to return an error like Go.
