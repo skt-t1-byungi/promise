@@ -1,18 +1,13 @@
 import test from 'ava'
-import pCancelSaga, { CancelError } from '.'
+import PCancel from '@byungi/p-cancel'
+import { silent } from '.'
 import pDelay from '@byungi/p-delay'
 
 function noop () {}
 
-test('check gene func', t => {
-    t.throws(() => pCancelSaga((() => {}) as any))
-    t.notThrows(() => pCancelSaga(async function * () {}))
-    t.notThrows(() => pCancelSaga(function * () {}))
-})
-
-test('basic', async t => {
+test('stop', async t => {
     t.plan(2)
-    const p = pCancelSaga(function * () {
+    const p = silent(function * () {
         try {
             yield pDelay(100)
             t.pass()
@@ -24,7 +19,13 @@ test('basic', async t => {
     })
     await pDelay(150)
     p.cancel()
-    p.catch(noop)
 })
 
-test.todo('cancel propagation')
+test.only('cancel propagation', t => {
+    const p = silent(function * () {
+        yield new PCancel((_, __, onCancel) => {
+            onCancel(() => t.pass())
+        })
+    })
+    p.cancel()
+})

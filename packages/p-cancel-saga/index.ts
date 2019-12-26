@@ -1,41 +1,41 @@
 import PCancel from '@byungi/p-cancel'
-import { isThenable, isCancellable, assert } from '@byungi/promise-helpers'
+import { isThenable, isCancellable } from '@byungi/promise-helpers'
 
 export { CancelError } from '@byungi/p-cancel'
+type SagaFunc<Args extends any[], R> = (...args: Args) => Generator<any, R>|AsyncGenerator<any, R>
 
-export default pCancelSaga
+export function silent <R> (saga: SagaFunc<[], R>) {
+    const p = pCancelSaga(saga)
+    p.catch(() => {})
+    return p
+}
 
-export function pCancelSaga<T> (saga: () => Generator<any, T>|AsyncGenerator<any, T>) {
-    assert('saga', 'function', saga)
-
-    const iter = saga()
-    if (typeof iter.next !== 'function') {
-        throw new TypeError('"saga" is not a generator function.')
-    }
-
-    return new PCancel<T>((resolve, reject, onCancel) => {
-        let pRes: ReturnType<typeof iter.next>
+export function factory <Args extends any[], R> (saga: SagaFunc<Args, R>) {
+    return (...args: Args) => new PCancel<R>((resolve, reject, onCancel) => {
+        const iter = saga(...args)
+        let runningPromise: PromiseLike<any>|null = null
         let isCanceled = false
 
         onCancel(() => {
             isCanceled = true
-            if (isCancellable(pRes)) pRes.cancel()
+            if (isCancellable(runningPromise)) runningPromise.cancel()
             iter.return(undefined as any)
         })
 
         function next (arg?: any) {
-            pRes = iter.next(arg)
-            if (!isThenable(pRes)) pRes = Promise.resolve(pRes)
-            pRes.then(onResolved, reject)
+            Promise.resolve(iter.next(arg)).then(onResolved, reject)
         }
 
         function onResolved (res: IteratorResult<any>) {
-            if (isCanceled) return
+            if (isCanceled) {
+                if (isCancellable(res.value)) res.value.cancel()
+                return
+            }
             if (res.done) {
                 resolve(res.value)
             } else {
                 if (isThenable(res.value)) {
-                    res.value.then(val => !isCanceled && next(val), onRejected)
+                    (runningPromise = res.value).then(val => !isCanceled && next(val), onRejected)
                 } else {
                     next(res.value)
                 }
@@ -49,3 +49,9 @@ export function pCancelSaga<T> (saga: () => Generator<any, T>|AsyncGenerator<any
         next()
     })
 }
+
+export function pCancelSaga<R> (saga: SagaFunc<[], R>) {
+    return factory(saga)()
+}
+
+export default pCancelSaga
