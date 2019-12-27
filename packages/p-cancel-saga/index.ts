@@ -1,7 +1,8 @@
 import PCancel from '@byungi/p-cancel'
 import { isThenable, isCancellable } from '@byungi/promise-helpers'
-
 export { CancelError } from '@byungi/p-cancel'
+
+export type AsyncResult<F extends (...args: any) => PromiseLike<any>> = F extends (...args: any) => PromiseLike<infer R> ? R : never
 type SagaFunc<Args extends any[], R> = (...args: Args) => Generator<any, R>|AsyncGenerator<any, R>
 
 export function factory <Args extends any[], R> (saga: SagaFunc<Args, R>) {
@@ -41,7 +42,7 @@ export function factory <Args extends any[], R> (saga: SagaFunc<Args, R>) {
 
         function onRejected (err: any) {
             if (isCanceled) return
-            let thrownRes: ReturnType<typeof iter.throw>
+            let thrownRes: Promise<IteratorResult<any, R>>
             try {
                 thrownRes = Promise.resolve(iter.throw(err))
             } catch {
