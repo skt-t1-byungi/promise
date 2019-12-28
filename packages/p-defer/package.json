@@ -1,7 +1,7 @@
 {
     "name": "@byungi/p-defer",
     "description": "A deferred promise.",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "engines": {
         "node": ">= 8"
     },
@@ -23,7 +23,7 @@
     ],
     "types": "index.d.ts",
     "dependencies": {
-        "@byungi/promise-helpers": "^0.1.0"
+        "@byungi/promise-helpers": "^0.2.0"
     },
     "publishConfig": {
         "access": "public"
