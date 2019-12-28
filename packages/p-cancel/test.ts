@@ -41,3 +41,8 @@ test('finally', async t => {
     p.cancel()
     await t.throwsAsync(p.finally(() => t.pass()))
 })
+
+test('immediately resolve', async t => {
+    const p = new PCancel(resolve => resolve(1))
+    t.is(await p, 1)
+})
