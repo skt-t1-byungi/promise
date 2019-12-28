@@ -1,7 +1,27 @@
 import test from 'ava'
 import PCancel from '@byungi/p-cancel'
-import { silent, pCancelSaga, AsyncResult } from '.'
+import { silent, pCancelSaga, AsyncResult, isCanceled } from '.'
 import pDelay from '@byungi/p-delay'
+
+test('check saga function', t => {
+    t.throws(() => silent(false as any))
+    t.throws(() => silent((function () {}) as any))
+    t.throws(() => silent((async function * () {}) as any))
+    t.notThrows(() => silent(function * () {}))
+})
+
+test('cancelled()', t => {
+    t.plan(2)
+    const p = silent(function * () {
+        try {
+            t.false(yield isCanceled())
+            yield pDelay(0)
+        } finally {
+            t.true(yield isCanceled())
+        }
+    })
+    p.cancel()
+})
 
 test('stop saga flow', async t => {
     t.plan(2)
@@ -12,20 +32,19 @@ test('stop saga flow', async t => {
             yield pDelay(100)
             t.fail()
         } finally {
-            if (p.isCanceled) t.pass()
+            if (yield isCanceled()) t.pass()
         }
     })
     await pDelay(150)
     p.cancel()
 })
 
-/** @todo */
-test.skip('yield after cancel', t => {
+test('yield after cancel', t => {
     const p = silent(function * () {
         try {
             yield 1
         } finally {
-            if (p.isCanceled) t.is(yield 2, 2)
+            t.is(yield 2, 2)
         }
     })
     p.cancel()
@@ -45,12 +64,12 @@ test('return value', async t => {
     t.is(await p2, 3)
 })
 
-test('async error', async t => {
-    const p = silent(async function * () {
-        await Promise.reject(new Error('asyncErr'))
+test('saga error', async t => {
+    const p = silent(function * () {
+        throw new Error('sagaErr')
         t.fail()
     })
-    await t.throwsAsync(p, 'asyncErr')
+    await t.throwsAsync(p, 'sagaErr')
 })
 
 test('yielded promise error', async t => {
@@ -73,11 +92,16 @@ test('cancel propagation', async t => {
 })
 
 test.cb('cancel propagation (immediately)', t => {
+    t.plan(1)
     const p = silent(function * () {
-        yield new PCancel((_, __, onCancel) => {
-            onCancel(() => t.end())
-        })
-        t.fail()
+        try {
+            yield new PCancel((_, __, onCancel) => {
+                onCancel(() => t.pass())
+            })
+            t.fail()
+        } finally {
+            if (yield isCanceled()) t.end()
+        }
     })
     p.cancel()
 })
