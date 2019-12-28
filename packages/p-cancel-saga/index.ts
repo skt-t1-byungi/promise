@@ -7,10 +7,10 @@ type AsyncFn<Args extends any[], R=any> = (...args: Args) => PromiseLike<R>
 
 export type AsyncResult<F extends AsyncFn<any>> = F extends AsyncFn<any, infer R> ? R : never
 
-const IS_CANCELED = typeof Symbol === 'function' ? Symbol('CANCELLED') : {}
+export const IS_CANCELED = typeof Symbol === 'function' ? Symbol('CANCELLED') : {}
 
 export function factory <Args extends any[], R> (saga: Saga<Args, R>) {
-    if (!isGenFn(saga)) throw new TypeError('"saga" must be a generator function.')
+    if (!isGenFn(saga)) throw new TypeError('"saga" must be a `GeneratorFunction` type.')
 
     return (...args: Args) => new PCancel<R>((resolve, reject, onCancel) => {
         const iter = saga(...args)
@@ -62,10 +62,6 @@ export function factory <Args extends any[], R> (saga: Saga<Args, R>) {
 
         next()
     })
-}
-
-export function isCanceled () {
-    return IS_CANCELED
 }
 
 export function pCancelSaga<R> (saga: Saga<[], R>) {

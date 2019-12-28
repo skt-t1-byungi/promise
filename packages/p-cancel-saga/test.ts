@@ -1,6 +1,6 @@
 import test from 'ava'
 import PCancel from '@byungi/p-cancel'
-import { silent, pCancelSaga, AsyncResult, isCanceled } from '.'
+import { silent, pCancelSaga, AsyncResult, IS_CANCELED } from '.'
 import pDelay from '@byungi/p-delay'
 
 test('check saga function', t => {
@@ -10,14 +10,14 @@ test('check saga function', t => {
     t.notThrows(() => silent(function * () {}))
 })
 
-test('cancelled()', t => {
+test('IS_CANCELED', t => {
     t.plan(2)
     const p = silent(function * () {
         try {
-            t.false(yield isCanceled())
+            t.false(yield IS_CANCELED)
             yield pDelay(0)
         } finally {
-            t.true(yield isCanceled())
+            t.true(yield IS_CANCELED)
         }
     })
     p.cancel()
@@ -32,7 +32,7 @@ test('stop saga flow', async t => {
             yield pDelay(100)
             t.fail()
         } finally {
-            if (yield isCanceled()) t.pass()
+            if (yield IS_CANCELED) t.pass()
         }
     })
     await pDelay(150)
@@ -100,14 +100,14 @@ test.cb('cancel propagation (immediately)', t => {
             })
             t.fail()
         } finally {
-            if (yield isCanceled()) t.end()
+            if (yield IS_CANCELED) t.end()
         }
     })
     p.cancel()
 })
 
 test.skip('AsyncResult type infer', t => {
-    const asyncFn = () => Promise.resolve(10)
+    const asyncFn = () => Promise.resolve(1)
     silent(function * () {
         let n = (yield asyncFn()) as AsyncResult<typeof asyncFn>
         t.truthy(n++)
