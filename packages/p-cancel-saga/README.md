@@ -109,7 +109,7 @@ Returns whether the promise is canceled.
 Similar to `then` but can propagate `cancel` to the upper promise.
 
 ### IS_CANCELED
-When `yield` in `saga`, this symbol returns whether the promise is canceled.
+`yield` this symbol in `saga`, it returns whether  the promise is canceled.
 
 ### factory(saga)
 Returns a reusable function using `saga` with arguments.
