@@ -3,7 +3,7 @@ A cancelable promise with saga.
 
 ## Example
 ```js
-import pCancelSaga from '@byungi/p-cancel-saga'
+import pCancelSaga, { IS_CANCELED } from '@byungi/p-cancel-saga'
 
 const promise = pCancelSaga(function * () {
     try {
@@ -15,7 +15,7 @@ const promise = pCancelSaga(function * () {
 
         return result2
     } finally {
-        if (promise.isCanceled) {
+        if (yield IS_CANCELED) {
             console.log('Canceled!')
         }
     }
@@ -68,7 +68,7 @@ const promise = pCancelSaga(function * () {
 
         return result2
     } finally {
-        if (promise.isCanceled) {
+        if (yield IS_CANCELED) {
             console.log('Canceled!')propagation
         }
     }
@@ -76,23 +76,25 @@ const promise = pCancelSaga(function * () {
 ```
 ##### Cancel propagation
 ```js
-const parent = new PCancel((resolve, reject, onCancel) => {
+const parentPromise = new PCancel((resolve, reject, onCancel) => {
     onCancel(() => {
         console.log('Cancel parent')
     })
     /* ... */
 })
 
-const child = pCancelSaga(function * () {
+const childPromise = pCancelSaga(function * () {
     try {
-        const result = yield parent
+        const result = yield parentPromise
         /* ... */
     } finally {
-        if (p2.isCanceled) console.log('Cancel child')
+        if (yield IS_CANCELED) {
+            console.log('Cancel child')
+        }
     }
 })
 
-child.cancel()
+childPromise.cancel()
 // => Cancel child
 // => Cancel parent
 ```
@@ -105,6 +107,68 @@ Returns whether the promise is canceled.
 
 ### promise.pipe(onFulfilled, onRejected)
 Similar to `then` but can propagate `cancel` to the upper promise.
+
+### IS_CANCELED
+When `yield` in `saga`, this symbol returns whether the promise is canceled.
+
+### factory(saga)
+Returns a reusable function using `saga` with arguments.
+
+```js
+import { factory, IS_CANCELED } from '@byungi/p-cancel-saga'
+
+const asyncTaskFunction = factory(function * (url, params) {
+    try {
+        const result = yield apiGet(url, params)
+        return result
+    } finally {
+        if (yield IS_CANCELED) {
+            /* ... */
+        }
+    }
+})
+
+const promise = asyncTaskFunction('/data', { id: 1 })
+```
+
+### silent(saga)
+If it's just a cancelable task (not a promise), `CancelError` is bothersome. This function does not propagate an error.
+
+```js
+import { silent, IS_CANCELED } from '@byungi/p-cancel-saga'
+
+const task = silent(function * () {
+    while (true) {
+        yield delay(1000)
+        yield asyncTask()
+    }
+})
+
+task.cancel() // => No `unhandledRejection` occurs.
+```
+
+## Tips
+### Type inference of yield promise in saga
+```ts
+const promise = pCancelSaga(function * () {
+    const data = yield getDataAsync() // => "data" type is `any` or `unknown`.
+    /* ... */
+})
+```
+In TypeScript, type inference of yield promise in generator functions is difficult. Specify the type or use the provided helper type(`AsyncResult<F>`).
+
+```ts
+import pCancelSaga, { AsyncResult } from '@byungi/p-cancel-saga'
+
+const promise = pCancelSaga(function * () {
+    const data = (yield getDataAsync()) as {value: string}
+
+    // or
+    const data = (yield getDataAsync()) as AsyncResult<typeof getDataAsync>
+
+    /* ... */
+})
+```
 
 ## License
 MIT

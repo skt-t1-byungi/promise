@@ -7,7 +7,7 @@ type AsyncFn<Args extends any[], R=any> = (...args: Args) => PromiseLike<R>
 
 export type AsyncResult<F extends AsyncFn<any>> = F extends AsyncFn<any, infer R> ? R : never
 
-export const IS_CANCELED = typeof Symbol === 'function' ? Symbol('CANCELED') : {}
+export const IS_CANCELED = Symbol('IS_CANCELED')
 
 export function factory <Args extends any[], R> (saga: Saga<Args, R>) {
     if (!isGenFn(saga)) throw new TypeError('"saga" must be a `GeneratorFunction` type.')
@@ -21,11 +21,11 @@ export function factory <Args extends any[], R> (saga: Saga<Args, R>) {
             isCanceled = true
             if (isCancelable(pRunning)) pRunning.cancel()
             pRunning = null
-            const res = iter.return(undefined as any)
+            const res = iter.return(undefined)
             if (!res.done) handle(res)
         })
 
-        function next (arg?: any) {
+        function iterNext (arg?: any) {
             let res: IteratorResult<any, R>
             try {
                 res = iter.next(arg)
@@ -35,7 +35,7 @@ export function factory <Args extends any[], R> (saga: Saga<Args, R>) {
             handle(res)
         }
 
-        function throwErr (err: any) {
+        function iterThrow (err: any) {
             let res: IteratorResult<any, R>
             try {
                 res = iter.throw(err)
@@ -51,16 +51,16 @@ export function factory <Args extends any[], R> (saga: Saga<Args, R>) {
             } else {
                 if (isThenable(res.value)) {
                     (pRunning = res.value).then(
-                        val => pRunning === res.value && next(val),
-                        err => pRunning === res.value && throwErr(err)
+                        val => pRunning === res.value && iterNext(val),
+                        err => pRunning === res.value && iterThrow(err)
                     )
                 } else {
-                    next(res.value === IS_CANCELED ? isCanceled : res.value)
+                    iterNext(res.value === IS_CANCELED ? isCanceled : res.value)
                 }
             }
         }
 
-        next()
+        iterNext()
     })
 }
 
