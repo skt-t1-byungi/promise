@@ -69,7 +69,7 @@ const promise = pCancelSaga(function * () {
         return result2
     } finally {
         if (yield IS_CANCELED) {
-            console.log('Canceled!')propagation
+            console.log('Canceled!')
         }
     }
 })
@@ -100,7 +100,7 @@ childPromise.cancel()
 ```
 
 ### promise.cancel([reason])
-Cancel the flow in `saga` and throw a `CancelError` to promise.
+Stop the flow in `saga` and throw a `CancelError` to promise.
 
 ### promise.isCanceled
 Returns whether the promise is canceled.
