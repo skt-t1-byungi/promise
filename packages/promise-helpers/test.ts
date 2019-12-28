@@ -1,5 +1,5 @@
 import test from 'ava'
-import { assert, isCancellable, isThenable } from '.'
+import { assert, isCancelable, isThenable } from '.'
 
 test('assert', t => {
     const txt = (name: string, expected: string, type: string) => `Expected "${name}" to be of type ${expected}, but "${type}".`
@@ -21,7 +21,7 @@ test('isCancelable', t => {
     const p = new Promise(() => { })
     const cancel = () => undefined
 
-    t.false(isCancellable(p))
-    t.false(isCancellable({ cancel }))
-    t.true(isCancellable(Object.assign(p, { cancel })))
+    t.false(isCancelable(p))
+    t.false(isCancelable({ cancel }))
+    t.true(isCancelable(Object.assign(p, { cancel })))
 })

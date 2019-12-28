@@ -1,6 +1,6 @@
 import PCancel from '@byungi/p-cancel'
 import pDelay from '@byungi/p-delay'
-import { isCancellable, Resolver } from '@byungi/promise-helpers'
+import { isCancelable, Resolver } from '@byungi/promise-helpers'
 
 export { CancelError } from '@byungi/p-cancel'
 
@@ -19,7 +19,7 @@ class PWhile<ConditionResult extends boolean, LoopResult> extends PCancel<LoopRe
             let runningPromise: PromiseLike<any>
 
             onCancel(() => {
-                if (isCancellable(runningPromise)) runningPromise.cancel()
+                if (isCancelable(runningPromise)) runningPromise.cancel()
             })
 
             const run = <T>(promise: Runner<T>, then: (result: T) => void) => {

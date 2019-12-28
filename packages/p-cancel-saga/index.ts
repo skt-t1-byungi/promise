@@ -1,5 +1,5 @@
 import PCancel from '@byungi/p-cancel'
-import { isThenable, isCancellable } from '@byungi/promise-helpers'
+import { isThenable, isCancelable } from '@byungi/promise-helpers'
 export { CancelError } from '@byungi/p-cancel'
 
 type Saga<Args extends any[], R> = (...args: Args) => Generator<any, R>
@@ -7,7 +7,7 @@ type AsyncFn<Args extends any[], R=any> = (...args: Args) => PromiseLike<R>
 
 export type AsyncResult<F extends AsyncFn<any>> = F extends AsyncFn<any, infer R> ? R : never
 
-export const IS_CANCELED = typeof Symbol === 'function' ? Symbol('CANCELLED') : {}
+export const IS_CANCELED = typeof Symbol === 'function' ? Symbol('CANCELED') : {}
 
 export function factory <Args extends any[], R> (saga: Saga<Args, R>) {
     if (!isGenFn(saga)) throw new TypeError('"saga" must be a `GeneratorFunction` type.')
@@ -19,7 +19,7 @@ export function factory <Args extends any[], R> (saga: Saga<Args, R>) {
 
         onCancel(() => {
             isCanceled = true
-            if (isCancellable(pRunning)) pRunning.cancel()
+            if (isCancelable(pRunning)) pRunning.cancel()
             pRunning = null
             const res = iter.return(undefined as any)
             if (!res.done) handle(res)

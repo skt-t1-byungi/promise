@@ -1,6 +1,6 @@
 import pDelay from '@byungi/p-delay'
 import pTimeout from '@byungi/p-timeout'
-import { CancellablePromise } from '@byungi/promise-helpers'
+import { CancelablePromise } from '@byungi/promise-helpers'
 import test from 'ava'
 
 test('test', async t => {
@@ -10,7 +10,7 @@ test('test', async t => {
 
 test('promise clear if throws', async t => {
     let calls = 0
-    const p: CancellablePromise<void> = pDelay(200) as any
+    const p: CancelablePromise<void> = pDelay(200) as any
     p.cancel = () => calls++
 
     await t.throwsAsync(pTimeout(p, 150))

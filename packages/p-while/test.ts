@@ -23,7 +23,7 @@ test('basic', async t => {
     t.is(result, 'hello')
 })
 
-test('cancellable', async t => {
+test('cancelable', async t => {
     let i = 0
     const random = Math.trunc(Math.random() * 10)
 

@@ -5,7 +5,7 @@ export type OnRejected<T = never> = (reason: any) => T | PromiseLike<T>
 export type OnFinally = () => void
 export type Executor<T> = (resolve: Resolver<T>, reject: Rejector) => void
 
-export interface CancellablePromise<T> extends PromiseLike<T> {
+export interface CancelablePromise<T> extends PromiseLike<T> {
     cancel (reason?: string): void;
 }
 
@@ -20,6 +20,6 @@ export function isThenable<T> (promise: any): promise is PromiseLike<T> {
     return promise && typeof promise.then === 'function'
 }
 
-export function isCancellable <T> (promise: any): promise is CancellablePromise<T> {
+export function isCancelable <T> (promise: any): promise is CancelablePromise<T> {
     return isThenable(promise) && typeof (promise as any).cancel === 'function'
 }

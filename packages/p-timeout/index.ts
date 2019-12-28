@@ -1,4 +1,4 @@
-import { CancellablePromise, isCancellable } from '@byungi/promise-helpers'
+import { CancelablePromise, isCancelable } from '@byungi/promise-helpers'
 
 export class TimeoutError extends Error {
      readonly isTimeout = true
@@ -8,11 +8,11 @@ export class TimeoutError extends Error {
      }
 }
 
-export const pTimeout = <T>(promise: PromiseLike<T> | CancellablePromise<T>, ms: number) =>
+export const pTimeout = <T>(promise: PromiseLike<T> | CancelablePromise<T>, ms: number) =>
     new Promise((resolve, reject) => {
         const timer = setTimeout(() => {
             const err = new TimeoutError()
-            if (isCancellable(promise)) promise.cancel(err.message)
+            if (isCancelable(promise)) promise.cancel(err.message)
             reject(err)
         }, ms)
 
