@@ -14,7 +14,7 @@ export class CancelError extends Error {
 }
 
 export class PCancel<T> extends PClass<T> {
-    private _isPending!: boolean
+    private _isPendingRef: {value: boolean}
     private _isCanceled: boolean
     private _cancelers: Canceler[]
     private _reject: Rejector
@@ -46,8 +46,7 @@ export class PCancel<T> extends PClass<T> {
         this._reject = _reject
         this._isCanceled = false
         this._cancelers = _cancelers
-
-        Object.defineProperty(this, '_isPending', { get: () => isPendingRef.value })
+        this._isPendingRef = isPendingRef
     }
 
     get isCanceled () {
@@ -55,7 +54,7 @@ export class PCancel<T> extends PClass<T> {
     }
 
     cancel (reason?: any) {
-        if (!this._isPending || this._isCanceled) return
+        if (!this._isPendingRef.value || this._isCanceled) return
         this._isCanceled = true
 
         try {
