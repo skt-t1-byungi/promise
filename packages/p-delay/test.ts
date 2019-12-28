@@ -9,7 +9,7 @@ const m = () => {
 test('basic', async t => {
     const end = m()
     await pDelay(100)
-    t.true(end(100, 30))
+    t.true(end(100, 50))
 })
 
 test('clear', async t => {
@@ -19,5 +19,5 @@ test('clear', async t => {
     await pDelay(100)
     p.clear()
     await p
-    t.true(end(100, 30))
+    t.true(end(100, 50))
 })
