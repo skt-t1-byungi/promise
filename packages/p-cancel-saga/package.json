@@ -1,7 +1,7 @@
 {
     "name": "@byungi/p-cancel-saga",
     "description": "A cancelable promise with saga.",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "engines": {
         "node": ">= 8"
     },
@@ -28,7 +28,7 @@
     ],
     "types": "index.d.ts",
     "dependencies": {
-        "@byungi/p-cancel": "^0.2.0",
+        "@byungi/p-cancel": "^0.2.1",
         "@byungi/promise-helpers": "^0.2.0"
     },
     "devDependencies": {
