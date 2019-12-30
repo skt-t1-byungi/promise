@@ -1,7 +1,7 @@
 import test from 'ava'
 import PCancel, { CancelError } from '.'
 
-test('basic', async t => {
+test('promise cancel', async t => {
     t.plan(4)
     const p = new PCancel((_, __, onCancel) => onCancel(() => t.pass()))
 
@@ -11,33 +11,31 @@ test('basic', async t => {
     await t.throwsAsync(p, CancelError)
 })
 
-test('pipe', async t => {
-    t.plan(9)
+test('If the piped promise is canceled, parent is canceled.', async t => {
+    t.plan(2)
     const p = new PCancel((_, __, onCancel) => onCancel(() => t.pass()))
-    const np = p.pipe(() => undefined)
-    const npp = np.pipe(() => undefined, () => t.fail())
-
-    t.false(p.isCanceled)
-    t.false(np.isCanceled)
-    t.false(npp.isCanceled)
-    npp.cancel()
-    t.true(p.isCanceled)
-    t.true(np.isCanceled)
-    t.true(npp.isCanceled)
-    await t.throwsAsync(np)
-    await t.throwsAsync(npp)
+    const pp = p.pipe(() => {})
+    pp.cancel()
+    await t.throwsAsync(pp)
 })
 
-test('An error should not be propagated if catch by a pipe.', async t => {
+test('If the parent is canceled, CancelError is propagated to piped promise.', async t => {
+    const p = new PCancel(() => {})
+    const pp = p.pipe(() => {})
+    p.cancel()
+    await t.throwsAsync(pp, 'promise was canceled.')
+})
+
+test('Errors caught in the pipe are not propagated.', async t => {
     t.plan(2)
     const p = new PCancel((_, reject) => setTimeout(reject, 0))
-    const np = p.pipe(() => void 0, () => t.pass())
-    await t.notThrowsAsync(np)
+    const pp = p.pipe(undefined, () => t.pass())
+    await t.notThrowsAsync(pp)
 })
 
 test('finally', async t => {
     t.plan(2)
-    const p = new PCancel((_, __, onCancel) => onCancel(() => undefined))
+    const p = new PCancel((_, __, onCancel) => onCancel(() => {}))
     p.cancel()
     await t.throwsAsync(p.finally(() => t.pass()))
 })

@@ -75,11 +75,9 @@ export class PCancel<T> extends PClass<T> {
 
             this.then(
                 val => {
-                    if (this._isCanceled) return
                     resolve((onfulfilled ? onfulfilled(val) : val) as TR1)
                 },
                 err => {
-                    if (this._isCanceled) return
                     if (onrejected) {
                         resolve(onrejected(err))
                     } else {
