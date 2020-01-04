@@ -17,7 +17,7 @@
         "eslint-config-byungi": "^0.7.7",
         "lerna": "^3.20.1",
         "ts-node": "^8.5.4",
-        "typescript": "^3.6.3"
+        "typescript": "^3.7.4"
     },
     "ava": {
         "compileEnhancements": false,
