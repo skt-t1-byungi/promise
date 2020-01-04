@@ -4,7 +4,7 @@ import { CancelablePromise, isCancelable } from '@byungi/promise-helpers'
 export { CancelError } from '@byungi/p-cancel'
 
 export const pRetry = <T>(runner: () => PromiseLike<T> | CancelablePromise<T>, { retries = 1, interval = 0 } = {}) =>
-    new PCancel((resolve, reject, onCancel) => {
+    new PCancel<T>((resolve, reject, onCancel) => {
         let promise: PromiseLike<T> | CancelablePromise<T>
         let timer: ReturnType<typeof setTimeout>
         let isCanceled = false
